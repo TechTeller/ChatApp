@@ -10,8 +10,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.SubscriptionEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +30,7 @@ public class ChatActivity extends AppCompatActivity
 
     String username;
 
-    EditText chatBox;
+    public EditText chatBox;
     Button sendButton;
 
     @Override
@@ -35,7 +40,7 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.activity_chat);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ChatHandler.init();
+        ChatHandler.init(this);
         setTitle("");
         chatListView = (ListView) findViewById(R.id.chatListView);
         sendButton = (Button) findViewById(R.id.sendButton);
@@ -46,25 +51,21 @@ public class ChatActivity extends AppCompatActivity
         messageAdapter = new MessageAdapter(this);
         chatListView.setAdapter(messageAdapter);
 
-        sendButton.setOnClickListener(
-                new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        if(chatBox.getText().toString().equals(""))
-                            return;
-                        //Send the chatMessage
-                        ChatMessage message = new ChatMessage(username, chatBox.getText().toString(), System.currentTimeMillis());
-                        ChatHandler.sendMessage(message);
-                        chatBox.setText("");
-                        scrollChatToBottom();
+    }
 
-                        //Refresh the adapter
-                        chatListView.setAdapter(messageAdapter);
-                    }
-                }
-        );
+
+    public void onSendClicked(View view)
+    {
+        if(chatBox.getText().toString().equals(""))
+            return;
+        //Send the chatMessage
+        ChatMessage message = new ChatMessage(username, chatBox.getText().toString(), System.currentTimeMillis());
+//        messageAdapter.addMessage(message);
+        ChatHandler.sendMessage(message);
+        scrollChatToBottom();
+
+        //Refresh the adapter
+        chatListView.setAdapter(messageAdapter);
     }
 
     @Override
@@ -89,5 +90,36 @@ public class ChatActivity extends AppCompatActivity
                 chatListView.setSelection(messageAdapter.getCount() - 1);
             }
         });
+    }
+
+    public void listenForMessages()
+    {
+        PusherOptions options = new PusherOptions();
+        options.setCluster("ap1");
+        Pusher pusher = new Pusher("80ccf1ae59d11608c907", options);
+
+        Channel channel = pusher.subscribe("messages");
+
+        channel.bind("new_message", new SubscriptionEventListener()
+        {
+            @Override
+            public void onEvent(String channelName, String eventName, final String data)
+            {
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        Gson gson = new Gson();
+                        ChatMessage message = gson.fromJson(data, ChatMessage.class);
+                        messageAdapter.addMessage(message);
+                        chatListView.setAdapter(messageAdapter);
+                        scrollChatToBottom();
+                    }
+                });
+            }
+        });
+
+        pusher.connect();
     }
 }

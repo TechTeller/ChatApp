@@ -62,4 +62,10 @@ public class MessageAdapter extends BaseAdapter
 
         return convertView;
     }
+
+    public void addMessage(ChatMessage message)
+    {
+        ChatHandler.chatMessageList.add(message);
+        notifyDataSetChanged();
+    }
 }

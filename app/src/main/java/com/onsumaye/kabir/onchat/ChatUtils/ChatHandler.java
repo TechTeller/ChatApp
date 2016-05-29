@@ -1,29 +1,56 @@
 package com.onsumaye.kabir.onchat.ChatUtils;
 
-import com.parse.ParseObject;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.onsumaye.kabir.onchat.ChatActivity;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+
+
 public class ChatHandler
 {
     public static List<ChatMessage> chatMessageList;
+    private static ChatActivity chatActivity;
 
 
     //Initialize the username and chatmessage
-    public static void init()
+    public static void init(ChatActivity activity)
     {
+        chatActivity = activity;
         chatMessageList = new ArrayList<ChatMessage>();
 
     }
 
     public static void sendMessage(ChatMessage message)
     {
-        ParseObject messageObject = new ParseObject("chatMessage");
-        messageObject.put("username", message.getMessage());
-        messageObject.put("message", message.getMessage());
-        messageObject.saveInBackground();
+        RequestParams params = new RequestParams();
+        params.put("username", message.getUsername());
+        params.put("message", message.getMessage());
+        params.put("timestamp", message.getTimeStamp());
 
-        chatMessageList.add(message); //Later replace this code with sending message and querying the server for it
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.post("http://107.6.174.180:3000" + "/messages", params, new JsonHttpResponseHandler()
+        {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+            {
+                chatActivity.chatBox.setText("");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
+            {
+                Toast.makeText(chatActivity.getApplicationContext(), "Something went wrong.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

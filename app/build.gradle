@@ -19,10 +19,16 @@ android {
     }
 }
 
+repositories {
+    maven { url 'http://clojars.org/repo' }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0-beta1'
     compile files('libs/Parse-1.13.0/Parse-1.13.0.jar')
     compile files('libs/Parse-1.13.0/bolts-tasks-1.4.0.jar')
+    compile 'com.pusher:pusher-java-client:0.3.3'
+    compile 'com.loopj.android:android-async-http:1.4.9'
 }
