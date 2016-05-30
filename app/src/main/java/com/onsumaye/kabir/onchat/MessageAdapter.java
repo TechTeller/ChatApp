@@ -49,7 +49,6 @@ public class MessageAdapter extends BaseAdapter
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Holder holder = new Holder();
-        System.out.print("Updating view");
         convertView = inflater.inflate(R.layout.chat_view_item, null);
         holder.username = (TextView) convertView.findViewById(R.id.userDisplay);
         holder.message = (TextView) convertView.findViewById(R.id.messageDisplay);
@@ -58,7 +57,8 @@ public class MessageAdapter extends BaseAdapter
         //Assign the chat message to the views
         holder.username.setText(ChatHandler.chatMessageList.get(position).getUsername());
         holder.message.setText(ChatHandler.chatMessageList.get(position).getMessage());
-        holder.timeStamp.setText(ChatHandler.chatMessageList.get(position).getTimeStamp());
+        System.out.println("In message adapter: " + ChatHandler.chatMessageList.get(position).getTime());
+        holder.timeStamp.setText(ChatHandler.getTimeStamp(ChatHandler.chatMessageList.get(position).getTime()));
 
         return convertView;
     }
