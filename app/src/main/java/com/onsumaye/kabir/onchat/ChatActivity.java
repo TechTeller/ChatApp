@@ -97,7 +97,7 @@ public class ChatActivity extends AppCompatActivity
     {
         PusherOptions options = new PusherOptions();
         options.setCluster("ap1");
-        Pusher pusher = new Pusher("80ccf1ae59d11608c907", options);
+        Pusher pusher = new Pusher("baa865fd345548f09300", options);
 
         Channel channel = pusher.subscribe("messages");
 
