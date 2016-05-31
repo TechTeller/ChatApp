@@ -22,6 +22,7 @@ public class ChatHandler
     public static List<ChatMessage> chatMessageList;
     private static ChatActivity chatActivity;
 
+    public static String myUsername;
 
     //Initialize the username and chatmessage
     public static void init(ChatActivity activity)
@@ -30,7 +31,7 @@ public class ChatHandler
         chatMessageList = new ArrayList<ChatMessage>();
     }
 
-    public static void sendMessage(ChatMessage message)
+    public static void sendMessage(final ChatMessage message)
     {
         RequestParams params = new RequestParams();
         params.put("username", message.getUsername());
@@ -38,14 +39,16 @@ public class ChatHandler
         params.put("timestamp", message.getTime());
 
         AsyncHttpClient client = new AsyncHttpClient();
+        chatMessageList.add(message);
 
-      client.post("http://107.6.174.180:3000" + "/messages", params, new JsonHttpResponseHandler()
-//        client.post("http://192.168.42.181:3000" + "/messages", params, new JsonHttpResponseHandler()
+        client.post("http://107.6.174.180:3000" + "/messages", params, new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response)
             {
-                chatActivity.chatBox.setText("");
+                message.setSent(true);
+                chatActivity.messageAdapter.notifyDataSetChanged();
+                chatActivity.chatListView.setAdapter(chatActivity.chatListView.getAdapter());
             }
 
             @Override

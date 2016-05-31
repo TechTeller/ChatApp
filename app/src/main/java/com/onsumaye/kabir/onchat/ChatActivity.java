@@ -8,13 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
+import com.onsumaye.kabir.onchat.ChatUtils.MessageAdapter;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
@@ -23,18 +20,11 @@ import com.pusher.client.channel.SubscriptionEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class ChatActivity extends AppCompatActivity
 {
 
-    ListView chatListView;
-    MessageAdapter messageAdapter;
-    ChatMessage recievedMessage;
-
-    String username;
+    public ListView chatListView;
+    public MessageAdapter messageAdapter;
 
     public EditText chatBox;
     Button sendButton;
@@ -51,7 +41,7 @@ public class ChatActivity extends AppCompatActivity
         chatListView = (ListView) findViewById(R.id.chatListView);
         sendButton = (Button) findViewById(R.id.sendButton);
         chatBox = (EditText) findViewById(R.id.chatBox);
-        username = getIntent().getStringExtra("username");
+        ChatHandler.myUsername = getIntent().getStringExtra("username");
         listenForMessages();
         messageAdapter = new MessageAdapter(this);
         chatListView.setAdapter(messageAdapter);
@@ -64,9 +54,10 @@ public class ChatActivity extends AppCompatActivity
         if(chatBox.getText().toString().equals(""))
             return;
         //Send the chatMessage
-        ChatMessage message = new ChatMessage(username, chatBox.getText().toString(), System.currentTimeMillis());
+        ChatMessage message = new ChatMessage(ChatHandler.myUsername, chatBox.getText().toString(), System.currentTimeMillis());
         ChatHandler.sendMessage(message);
         scrollChatToBottom();
+        chatBox.setText("");
     }
 
     @Override
@@ -116,16 +107,19 @@ public class ChatActivity extends AppCompatActivity
                         try
                         {
                             obj = new JSONObject(data);
-                            message = new ChatMessage(obj.getString("username"),
-                                                      obj.getString("message"),
-                                                      obj.getLong("timestamp"));
+                                    message = new ChatMessage(obj.getString("username"),
+                                                              obj.getString("message"),
+                                                              obj.getLong("timestamp"));
 
-                            messageAdapter.addMessage(message);
+                            if(!message.getUsername().equals(ChatHandler.myUsername))
+                                messageAdapter.addMessage(message);
                         }
                         catch(JSONException e)
                         {
                             e.printStackTrace();
+                            System.out.println("Invalid JSON!");
                         }
+
                         chatListView.setAdapter(messageAdapter);
                         scrollChatToBottom();
                     }

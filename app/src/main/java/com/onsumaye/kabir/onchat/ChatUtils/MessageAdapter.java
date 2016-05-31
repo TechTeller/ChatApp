@@ -1,4 +1,4 @@
-package com.onsumaye.kabir.onchat;
+package com.onsumaye.kabir.onchat.ChatUtils;
 
 import android.app.Activity;
 import android.app.Service;
@@ -7,12 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
-
-import java.util.Date;
+import com.onsumaye.kabir.onchat.R;
 
 public class MessageAdapter extends BaseAdapter
 {
@@ -43,16 +43,32 @@ public class MessageAdapter extends BaseAdapter
     public class Holder
     {
         TextView username, message,timeStamp;
+        ImageView deliveryIcon;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
+        ChatMessage message = ChatHandler.chatMessageList.get(position);
         Holder holder = new Holder();
-        convertView = inflater.inflate(R.layout.chat_view_item, null);
+
+
+        //Set the gravity of the whole thing depending on whether the username matches or not
+        if(message.getUsername().equals(ChatHandler.myUsername))
+        {
+            //Set layout gravity to the right
+            convertView = setSenderFormat();
+        }
+        else
+        {
+            //Set the layout gravity to left (normal)
+            convertView = setReceiverFormat();
+        }
+
         holder.username = (TextView) convertView.findViewById(R.id.userDisplay);
         holder.message = (TextView) convertView.findViewById(R.id.messageDisplay);
         holder.timeStamp = (TextView) convertView.findViewById(R.id.timeStamp);
+        holder.deliveryIcon = (ImageView) convertView.findViewById(R.id.deliveryIcon);
 
         //Assign the chat message to the views
         holder.username.setText(ChatHandler.chatMessageList.get(position).getUsername());
@@ -68,4 +84,25 @@ public class MessageAdapter extends BaseAdapter
         ChatHandler.chatMessageList.add(message);
         notifyDataSetChanged();
     }
+
+    private View setSenderFormat()
+    {
+        return inflater.inflate(R.layout.sender_chat_view_item, null);
+    }
+
+    private View setReceiverFormat()
+    {
+        return inflater.inflate(R.layout.receiver_chat_view_item, null);
+    }
+
+    public void setSentIcon(ChatMessage message, boolean sent)
+    {
+        int position = ChatHandler.chatMessageList.indexOf(message);
+        if(sent)
+        {
+            
+        }
+    }
+
+
 }

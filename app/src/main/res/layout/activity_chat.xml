@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
+        android:divider="#00000000"
+        android:dividerHeight="12dp"
         android:layout_above="@+id/chatFields"
         android:id="@+id/chatListView">
 

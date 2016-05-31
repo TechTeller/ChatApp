@@ -8,6 +8,7 @@ public class ChatMessage
     private String username;
     private String message;
     private long time;
+    private boolean sent;
 
     public ChatMessage(String username, String message, long time)
     {
@@ -39,5 +40,15 @@ public class ChatMessage
     public long getTime()
     {
         return time;
+    }
+
+    public void setSent(boolean val)
+    {
+        sent = val;
+    }
+
+    public boolean isSent()
+    {
+        return sent;
     }
 }
