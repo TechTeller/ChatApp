@@ -95,10 +95,10 @@ public class MessageAdapter extends BaseAdapter
         return inflater.inflate(R.layout.receiver_chat_view_item, null);
     }
 
-    public void setSentIcon(ChatMessage message, boolean sent)
+    public void updateSentIcon(ChatMessage message)
     {
         int position = ChatHandler.chatMessageList.indexOf(message);
-        if(sent)
+        if(message.isSent())
         {
             
         }

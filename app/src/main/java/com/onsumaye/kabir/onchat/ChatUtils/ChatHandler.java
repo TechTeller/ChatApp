@@ -6,7 +6,12 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.ChatActivity;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.SubscriptionEventListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -47,8 +52,7 @@ public class ChatHandler
             public void onSuccess(int statusCode, Header[] headers, JSONObject response)
             {
                 message.setSent(true);
-                chatActivity.messageAdapter.notifyDataSetChanged();
-                chatActivity.chatListView.setAdapter(chatActivity.chatListView.getAdapter());
+                chatActivity.messageAdapter.updateSentIcon(message);
             }
 
             @Override
@@ -66,4 +70,62 @@ public class ChatHandler
         timeStamp = formatter.format(time);
         return timeStamp;
     }
+
+    public static void listenForMessages()
+    {
+        PusherOptions options = new PusherOptions();
+        options.setCluster("ap1");
+        Pusher pusher = new Pusher("baa865fd345548f09300", options);
+
+        Channel channel = pusher.subscribe("messages");
+
+        channel.bind("new_message", new SubscriptionEventListener()
+        {
+            @Override
+            public void onEvent(String channelName, String eventName, final String data)
+            {
+                chatActivity.runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        JSONObject obj;
+                        ChatMessage message;
+                        try
+                        {
+                            obj = new JSONObject(data);
+                            message = new ChatMessage(obj.getString("username"),
+                                    obj.getString("message"),
+                                    obj.getLong("timestamp"));
+
+                            //Message has been sent
+                            if(!message.getUsername().equals(ChatHandler.myUsername))
+                                chatActivity.messageAdapter.addMessage(message);
+                        }
+                        catch(JSONException e)
+                        {
+                            e.printStackTrace();
+                            System.out.println("Invalid JSON!");
+                        }
+
+                        chatActivity.chatListView.setAdapter(chatActivity.messageAdapter);
+                        scrollChatToBottom();
+                    }
+                });
+            }
+        });
+
+        pusher.connect();
+    }
+
+    public static void scrollChatToBottom() {
+        chatActivity.chatListView.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view
+                chatActivity.chatListView.setSelection(chatActivity.messageAdapter.getCount() - 1);
+            }
+        });
+    }
+
 }

@@ -42,7 +42,7 @@ public class ChatActivity extends AppCompatActivity
         sendButton = (Button) findViewById(R.id.sendButton);
         chatBox = (EditText) findViewById(R.id.chatBox);
         ChatHandler.myUsername = getIntent().getStringExtra("username");
-        listenForMessages();
+        ChatHandler.listenForMessages();
         messageAdapter = new MessageAdapter(this);
         chatListView.setAdapter(messageAdapter);
 
@@ -56,7 +56,7 @@ public class ChatActivity extends AppCompatActivity
         //Send the chatMessage
         ChatMessage message = new ChatMessage(ChatHandler.myUsername, chatBox.getText().toString(), System.currentTimeMillis());
         ChatHandler.sendMessage(message);
-        scrollChatToBottom();
+        ChatHandler.scrollChatToBottom();
         chatBox.setText("");
     }
 
@@ -72,61 +72,5 @@ public class ChatActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void scrollChatToBottom() {
-        chatListView.post(new Runnable() {
-            @Override
-            public void run() {
-                // Select the last row so it will scroll into view
-                chatListView.setSelection(messageAdapter.getCount() - 1);
-            }
-        });
-    }
-
-    public void listenForMessages()
-    {
-        PusherOptions options = new PusherOptions();
-        options.setCluster("ap1");
-        Pusher pusher = new Pusher("baa865fd345548f09300", options);
-
-        Channel channel = pusher.subscribe("messages");
-
-        channel.bind("new_message", new SubscriptionEventListener()
-        {
-            @Override
-            public void onEvent(String channelName, String eventName, final String data)
-            {
-                runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        JSONObject obj;
-                        ChatMessage message;
-                        try
-                        {
-                            obj = new JSONObject(data);
-                                    message = new ChatMessage(obj.getString("username"),
-                                                              obj.getString("message"),
-                                                              obj.getLong("timestamp"));
-
-                            if(!message.getUsername().equals(ChatHandler.myUsername))
-                                messageAdapter.addMessage(message);
-                        }
-                        catch(JSONException e)
-                        {
-                            e.printStackTrace();
-                            System.out.println("Invalid JSON!");
-                        }
-
-                        chatListView.setAdapter(messageAdapter);
-                        scrollChatToBottom();
-                    }
-                });
-            }
-        });
-
-        pusher.connect();
     }
 }

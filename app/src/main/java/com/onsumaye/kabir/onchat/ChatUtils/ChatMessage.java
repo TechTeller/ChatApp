@@ -5,6 +5,7 @@ import java.util.Locale;
 
 public class ChatMessage
 {
+    private long id;
     private String username;
     private String message;
     private long time;
@@ -15,6 +16,16 @@ public class ChatMessage
         this.username = username;
         this.message = message;
         this.time = time;
+    }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
     }
 
     public String getUsername()
