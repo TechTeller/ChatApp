@@ -36,15 +36,6 @@
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.UserViewActivity" />
 
-        <service
-            android:name=".gcm.MessageListenerService"
-            android:enabled="true"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
-
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

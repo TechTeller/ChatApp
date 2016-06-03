@@ -18,27 +18,16 @@ public class MyGcmPushReceiver extends GcmListenerService {
 
     private NotificationUtils notificationUtils;
 
-    /**
-     * Called when message is received.
-     *
-     * @param from   SenderID of the sender.
-     * @param bundle Data bundle containing message data as key/value pairs.
-     *               For Set of keys use data.keySet().
-     */
-
     @Override
-    public void onMessageReceived(String from, Bundle bundle) {
-        String title = bundle.getString("title");
+    public void onMessageReceived(String from, Bundle bundle)
+    {
+        String username = bundle.getString("username");
         String message = bundle.getString("message");
-        String image = bundle.getString("image");
-        String timestamp = bundle.getString("created_at");
-        Log.e(TAG, "From: " + from);
-        Log.e(TAG, "Title: " + title);
-        Log.e(TAG, "message: " + message);
-        Log.e(TAG, "image: " + image);
-        Log.e(TAG, "timestamp: " + timestamp);
+        String timestamp = bundle.getString("timestamp");
+        System.out.println(username + " " + message + " at " + timestamp + ".");
 
-        if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+        if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
+        {
 
             // app is in foreground, broadcast the push message
             Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
@@ -48,16 +37,13 @@ public class MyGcmPushReceiver extends GcmListenerService {
             // play notification sound
             NotificationUtils notificationUtils = new NotificationUtils();
             notificationUtils.playNotificationSound();
-        } else {
+        } else
+        {
 
             Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
             resultIntent.putExtra("message", message);
 
-            if (TextUtils.isEmpty(image)) {
-                showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
-            } else {
-                showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, image);
-            }
+            showNotificationMessage(getApplicationContext(), username, message, timestamp, resultIntent);
         }
     }
 
@@ -68,14 +54,5 @@ public class MyGcmPushReceiver extends GcmListenerService {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
-    }
-
-    /**
-     * Showing notification with text and image
-     */
-    private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
-        notificationUtils = new NotificationUtils(context);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
     }
 }

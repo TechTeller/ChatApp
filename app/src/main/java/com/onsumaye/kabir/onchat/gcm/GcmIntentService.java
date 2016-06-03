@@ -11,10 +11,19 @@ import android.widget.Toast;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SyncHttpClient;
+import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+
+import cz.msebera.android.httpclient.Header;
 
 public class GcmIntentService extends IntentService
 {
@@ -80,16 +89,31 @@ public class GcmIntentService extends IntentService
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
 
-    private void sendRegistrationToServer(final String token) {
-        // Send the registration token to our server
-        // to keep it in MySQL
+    private void sendRegistrationToServer(final String token)
+    {
+        RequestParams params = new RequestParams();
+        params.put("regId", token);
 
+        SyncHttpClient client = new SyncHttpClient();
+
+        client.post("http://107.6.174.180:3000" + "/registration", params, new JsonHttpResponseHandler()
+        {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+            {
+                System.out.println("Got status code" + statusCode);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
+            {
+                System.out.println("Got status code" + statusCode);
+            }
+        });
     }
 
-    /**
-     * Subscribe to a topic
-     */
-    public void subscribeToTopic(String topic) {
+    public void subscribeToTopic(String topic)
+    {
         GcmPubSub pubSub = GcmPubSub.getInstance(getApplicationContext());
         InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
         String token = null;
