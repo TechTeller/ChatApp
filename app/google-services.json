@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "233231949250",
+    "project_id": "chat-application-12994"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233231949250:android:05f443b08c32a929",
+        "android_client_info": {
+          "package_name": "com.onsumaye.kabir.onchat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8SGFkvAazp9kJBAaxeIHRdwAF1hQpOnk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

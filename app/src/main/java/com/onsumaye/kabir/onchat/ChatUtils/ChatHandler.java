@@ -5,11 +5,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.onsumaye.kabir.onchat.ChatActivity;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.SubscriptionEventListener;
+import com.onsumaye.kabir.onchat.activity.ChatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +47,15 @@ public class ChatHandler
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response)
             {
+                System.out.println("Status code: " + statusCode);
+                try {
+                    long id = response.getLong("id");
+                    System.out.println("Message ID : " + response.getInt("id"));
+                    message.setId(id);
+                } catch (JSONException e) {
+                    System.out.println("An exception occurred!");
+                    e.printStackTrace();
+                }
                 message.setSent(true);
                 chatActivity.messageAdapter.updateSentIcon(message);
             }
@@ -73,49 +78,7 @@ public class ChatHandler
 
     public static void listenForMessages()
     {
-        PusherOptions options = new PusherOptions();
-        options.setCluster("ap1");
-        Pusher pusher = new Pusher("baa865fd345548f09300", options);
 
-        Channel channel = pusher.subscribe("messages");
-
-        channel.bind("new_message", new SubscriptionEventListener()
-        {
-            @Override
-            public void onEvent(String channelName, String eventName, final String data)
-            {
-                chatActivity.runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        JSONObject obj;
-                        ChatMessage message;
-                        try
-                        {
-                            obj = new JSONObject(data);
-                            message = new ChatMessage(obj.getString("username"),
-                                    obj.getString("message"),
-                                    obj.getLong("timestamp"));
-
-                            //Message has been sent
-                            if(!message.getUsername().equals(ChatHandler.myUsername))
-                                chatActivity.messageAdapter.addMessage(message);
-                        }
-                        catch(JSONException e)
-                        {
-                            e.printStackTrace();
-                            System.out.println("Invalid JSON!");
-                        }
-
-                        chatActivity.chatListView.setAdapter(chatActivity.messageAdapter);
-                        scrollChatToBottom();
-                    }
-                });
-            }
-        });
-
-        pusher.connect();
     }
 
     public static void scrollChatToBottom() {
