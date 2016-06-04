@@ -76,10 +76,6 @@ public class ChatHandler
         return timeStamp;
     }
 
-    public static void listenForMessages()
-    {
-
-    }
 
     public static void scrollChatToBottom() {
         chatActivity.chatListView.post(new Runnable() {
@@ -87,6 +83,23 @@ public class ChatHandler
             public void run() {
                 // Select the last row so it will scroll into view
                 chatActivity.chatListView.setSelection(chatActivity.messageAdapter.getCount() - 1);
+            }
+        });
+    }
+
+    public static void addMessageToActivity(final long id, final String username, final String message, final long timestamp)
+    {
+        chatActivity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                final ChatMessage cMessage;
+                cMessage = new ChatMessage(username, message, timestamp);
+                if (!cMessage.getUsername().equals(ChatHandler.myUsername))
+                    chatActivity.messageAdapter.addMessage(cMessage);
+
+                chatActivity.chatListView.setAdapter(chatActivity.messageAdapter);
+                scrollChatToBottom();
             }
         });
     }

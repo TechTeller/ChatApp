@@ -55,7 +55,6 @@ public class ChatActivity extends AppCompatActivity
         messageAdapter = new MessageAdapter(this);
         chatListView.setAdapter(messageAdapter);
         NotificationHandler.init(getApplicationContext());
-        ChatHandler.listenForMessages();
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

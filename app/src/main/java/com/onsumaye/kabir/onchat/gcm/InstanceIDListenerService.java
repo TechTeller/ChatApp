@@ -3,11 +3,9 @@ package com.onsumaye.kabir.onchat.gcm;
 import android.content.Intent;
 import android.util.Log;
 
-import com.google.android.gms.iid.InstanceIDListenerService;
+public class InstanceIDListenerService extends com.google.android.gms.iid.InstanceIDListenerService {
 
-public class MyInstanceIDListenerService extends InstanceIDListenerService {
-
-    private static final String TAG = MyInstanceIDListenerService.class.getSimpleName();
+    private static final String TAG = InstanceIDListenerService.class.getSimpleName();
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of

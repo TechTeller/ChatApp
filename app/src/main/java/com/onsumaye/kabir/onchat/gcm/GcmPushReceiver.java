@@ -4,32 +4,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
+import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
-import com.onsumaye.kabir.onchat.activity.LoginActivity;
 import com.onsumaye.kabir.onchat.app.Config;
 
-public class MyGcmPushReceiver extends GcmListenerService {
+import org.json.JSONObject;
 
-    private static final String TAG = MyGcmPushReceiver.class.getSimpleName();
+public class GcmPushReceiver extends GcmListenerService {
+
+    private static final String TAG = GcmPushReceiver.class.getSimpleName();
 
     private NotificationUtils notificationUtils;
 
     @Override
     public void onMessageReceived(String from, Bundle bundle)
     {
-        String username = bundle.getString("username");
-        String message = bundle.getString("message");
-        String timestamp = bundle.getString("timestamp");
+        final long id = bundle.getLong("id");
+        final String username = bundle.getString("username");
+        final String message = bundle.getString("message");
+        final long timestamp = bundle.getLong("timestamp");
         System.out.println(username + " " + message + " at " + timestamp + ".");
 
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
         {
+            //Add to chatmessage
+            ChatHandler.addMessageToActivity(id, username, message, timestamp);
 
-            // app is in foreground, broadcast the push message
+            // app is in background, broadcast the push message
             Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
             pushNotification.putExtra("message", message);
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
@@ -43,7 +47,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
             Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
             resultIntent.putExtra("message", message);
 
-            showNotificationMessage(getApplicationContext(), username, message, timestamp, resultIntent);
+            showNotificationMessage(getApplicationContext(), username, message, String.valueOf(timestamp) , resultIntent);
         }
     }
 
