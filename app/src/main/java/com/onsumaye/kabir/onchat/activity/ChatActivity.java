@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
 import com.onsumaye.kabir.onchat.ChatUtils.MessageAdapter;
@@ -24,6 +27,8 @@ import com.onsumaye.kabir.onchat.app.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class ChatActivity extends AppCompatActivity
 {
@@ -64,8 +69,28 @@ public class ChatActivity extends AppCompatActivity
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
                     String token = intent.getStringExtra("token");
+                    System.out.println("GCM Token: " + token);
 
-                    Toast.makeText(getApplicationContext(), "GCM registration token: " + token, Toast.LENGTH_LONG).show();
+                    //Send the registration to the server to store in the users database
+                    AsyncHttpClient client = new AsyncHttpClient();
+
+                    RequestParams params = new RequestParams();
+                    params.put("token", token);
+                    params.put("username", ChatHandler.myUsername);
+                    /*client.post("http://107.6.174.180:3000" + "/users", params, new JsonHttpResponseHandler()
+                    {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+                        {
+                            System.out.println("Got status code in chatActivity on Success" + statusCode);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
+                        {
+                            System.out.println("Got status code in chatActivity on Failure" + statusCode);
+                        }
+                    });*/
 
                 } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
                     // gcm registration id is stored in our server's MySQL
@@ -74,8 +99,6 @@ public class ChatActivity extends AppCompatActivity
 
                 } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
-
-                    Toast.makeText(getApplicationContext(), "Push notification is received!", Toast.LENGTH_LONG).show();
                 }
             }
         };
