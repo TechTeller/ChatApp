@@ -87,7 +87,7 @@ public class ChatHandler
         });
     }
 
-    public static void addMessageToActivity(final long id, final String username, final String message, final long timestamp)
+    public static void addMessageToActivity(final long id, final String username, final String message, final String timestamp)
     {
         chatActivity.runOnUiThread(new Runnable()
         {

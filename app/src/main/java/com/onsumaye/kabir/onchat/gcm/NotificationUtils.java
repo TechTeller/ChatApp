@@ -89,7 +89,6 @@ public class NotificationUtils
             }
         } else {
             showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
-            playNotificationSound();
         }
     }
 
@@ -97,22 +96,8 @@ public class NotificationUtils
     private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.addLine(message);
 
-        if (Config.appendNotificationMessages) {
-            // store the notification in shared pref first
-            MyApplication.getInstance().getPrefManager().addNotification(message);
-
-            // get the notifications from shared preferences
-            String oldNotification = MyApplication.getInstance().getPrefManager().getNotifications();
-
-            List<String> messages = Arrays.asList(oldNotification.split("\\|"));
-
-            for (int i = messages.size() - 1; i >= 0; i--) {
-                inboxStyle.addLine(messages.get(i));
-            }
-        } else {
-            inboxStyle.addLine(message);
-        }
 
 
         Notification notification;
@@ -169,18 +154,6 @@ public class NotificationUtils
         } catch (IOException e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    // Playing notification sound
-    public void playNotificationSound() {
-        try {
-            Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                    + "://" + MyApplication.getInstance().getApplicationContext().getPackageName() + "/raw/notification");
-            Ringtone r = RingtoneManager.getRingtone(MyApplication.getInstance().getApplicationContext(), alarmSound);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

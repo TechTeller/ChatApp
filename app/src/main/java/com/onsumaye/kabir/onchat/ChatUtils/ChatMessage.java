@@ -11,11 +11,11 @@ public class ChatMessage
     private long time;
     private boolean sent;
 
-    public ChatMessage(String username, String message, long time)
+    public ChatMessage(String username, String message, String time)
     {
         this.username = username;
         this.message = message;
-        this.time = time;
+        this.time = Long.parseLong(time);
     }
 
     public long getId()

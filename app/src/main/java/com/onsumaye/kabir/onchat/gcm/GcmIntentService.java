@@ -14,6 +14,7 @@ import com.google.android.gms.iid.InstanceID;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
+import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
@@ -93,6 +94,7 @@ public class GcmIntentService extends IntentService
     {
         RequestParams params = new RequestParams();
         params.put("regId", token);
+        params.put("username", ChatHandler.myUsername);
 
         SyncHttpClient client = new SyncHttpClient();
 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.gcm.GcmIntentService;
@@ -61,10 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        if (checkPlayServices()) {
-            registerGCM();
-        }
-
         usernameEditText = (EditText) findViewById(R.id.username);
         rememberMe = (CheckBox) findViewById(R.id.rememberMe);
 
@@ -104,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            Intent intent = new Intent(this, ChatActivity.class);
+            Intent intent = new Intent(this, UsersActivity.class);
             intent.putExtra("username", usernameEditText.getText().toString());
 
             if(rememberMe.isChecked())
@@ -113,7 +110,11 @@ public class LoginActivity extends AppCompatActivity {
                 editor.commit();
             }
 
-            loggedIn = true;
+            if (checkPlayServices())
+            {
+                ChatHandler.myUsername = usernameEditText.getText().toString();
+                registerGCM();
+            }
 
             startActivity(intent);
         }

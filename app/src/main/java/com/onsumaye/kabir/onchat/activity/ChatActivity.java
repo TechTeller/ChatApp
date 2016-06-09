@@ -14,9 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
@@ -25,10 +23,6 @@ import com.onsumaye.kabir.onchat.ChatUtils.NotificationHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
 
 public class ChatActivity extends AppCompatActivity
 {
@@ -103,7 +97,6 @@ public class ChatActivity extends AppCompatActivity
             }
         };
 
-
     }
 
 
@@ -112,7 +105,7 @@ public class ChatActivity extends AppCompatActivity
         if(chatBox.getText().toString().equals(""))
             return;
         //Send the chatMessage
-        ChatMessage message = new ChatMessage(ChatHandler.myUsername, chatBox.getText().toString(), System.currentTimeMillis());
+        ChatMessage message = new ChatMessage(ChatHandler.myUsername, chatBox.getText().toString(), System.currentTimeMillis() + "");
         ChatHandler.sendMessage(message);
         ChatHandler.scrollChatToBottom();
         chatBox.setText("");

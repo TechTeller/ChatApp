@@ -22,10 +22,10 @@ public class GcmPushReceiver extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle bundle)
     {
-        final long id = bundle.getLong("id");
+        final long id = Long.parseLong(bundle.getString("id"));
         final String username = bundle.getString("username");
         final String message = bundle.getString("message");
-        final long timestamp = bundle.getLong("timestamp");
+        final String timestamp = bundle.getString("timestamp");
         System.out.println(username + " " + message + " at " + timestamp + ".");
 
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
@@ -38,9 +38,6 @@ public class GcmPushReceiver extends GcmListenerService {
             pushNotification.putExtra("message", message);
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
-            // play notification sound
-            NotificationUtils notificationUtils = new NotificationUtils();
-            notificationUtils.playNotificationSound();
         } else
         {
 
