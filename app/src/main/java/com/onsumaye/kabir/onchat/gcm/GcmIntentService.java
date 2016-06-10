@@ -98,12 +98,21 @@ public class GcmIntentService extends IntentService
 
         SyncHttpClient client = new SyncHttpClient();
 
-        client.post("http://107.6.174.180:3000" + "/registration", params, new JsonHttpResponseHandler()
+        client.post(Config.SERVER_IP + "/registration", params, new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response)
             {
-                System.out.println("Got status code" + statusCode);
+                System.out.println("Got status code " + statusCode + " from login server.");
+                try
+                {
+                    String gcmId = response.getString("gcmId");
+                    System.out.println(gcmId);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
 
             @Override

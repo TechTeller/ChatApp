@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        usernameEditText = (EditText) findViewById(R.id.username);
+        usernameEditText = (EditText) findViewById(R.id.usernameTextView);
         rememberMe = (CheckBox) findViewById(R.id.rememberMe);
 
         String savedUsername = getSharedPreferences("loginPrefs", MODE_PRIVATE).getString("username", null);

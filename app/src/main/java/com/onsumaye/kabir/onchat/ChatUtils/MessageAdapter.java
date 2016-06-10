@@ -73,7 +73,6 @@ public class MessageAdapter extends BaseAdapter
         //Assign the chat message to the views
         holder.username.setText(ChatHandler.chatMessageList.get(position).getUsername());
         holder.message.setText(ChatHandler.chatMessageList.get(position).getMessage());
-        System.out.println("In message adapter: " + ChatHandler.chatMessageList.get(position).getTime());
         holder.timeStamp.setText(ChatHandler.getTimeStamp(ChatHandler.chatMessageList.get(position).getTime()));
 
         return convertView;

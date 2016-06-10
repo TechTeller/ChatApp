@@ -6,6 +6,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
+import com.onsumaye.kabir.onchat.app.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +43,7 @@ public class ChatHandler
         AsyncHttpClient client = new AsyncHttpClient();
         chatMessageList.add(message);
 
-        client.post("http://107.6.174.180:3000" + "/messages", params, new JsonHttpResponseHandler()
+        client.post(Config.SERVER_IP + "/messages", params, new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response)

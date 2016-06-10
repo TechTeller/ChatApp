@@ -10,6 +10,8 @@ public class Config
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String PUSH_NOTIFICATION = "pushNotification";
 
+    public static final String SERVER_IP = "http://107.6.174.180:3000";
+
     public static final int PUSH_TYPE_CHATROOM = 1;
     public static final int PUSH_TYPE_USER = 2;
 

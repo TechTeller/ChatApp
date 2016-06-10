@@ -30,8 +30,6 @@ public class ChatActivity extends AppCompatActivity
     public ListView chatListView;
     public MessageAdapter messageAdapter;
 
-
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     public EditText chatBox;
@@ -71,20 +69,6 @@ public class ChatActivity extends AppCompatActivity
                     RequestParams params = new RequestParams();
                     params.put("token", token);
                     params.put("username", ChatHandler.myUsername);
-                    /*client.post("http://107.6.174.180:3000" + "/users", params, new JsonHttpResponseHandler()
-                    {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response)
-                        {
-                            System.out.println("Got status code in chatActivity on Success" + statusCode);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
-                        {
-                            System.out.println("Got status code in chatActivity on Failure" + statusCode);
-                        }
-                    });*/
 
                 } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
                     // gcm registration id is stored in our server's MySQL
