@@ -3,7 +3,7 @@ package com.onsumaye.kabir.onchat.app;
 
 public class Config
 {
-    public static boolean appendNotificationMessages = true;
+    public static boolean appendNotificationMessages = false;
 
     public static final String TOPIC_GLOBAL = "global";
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenServer";

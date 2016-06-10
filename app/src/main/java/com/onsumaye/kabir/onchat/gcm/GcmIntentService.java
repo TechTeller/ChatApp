@@ -60,7 +60,6 @@ public class GcmIntentService extends IntentService
         }
 
     }
-
     /**
      * Registering with GCM and obtaining the gcm registration id
      */

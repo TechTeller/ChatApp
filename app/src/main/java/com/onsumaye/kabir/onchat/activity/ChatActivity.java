@@ -47,7 +47,6 @@ public class ChatActivity extends AppCompatActivity
         chatListView = (ListView) findViewById(R.id.chatListView);
         sendButton = (Button) findViewById(R.id.sendButton);
         chatBox = (EditText) findViewById(R.id.chatBox);
-        ChatHandler.myUsername = getIntent().getStringExtra("username");
 
         messageAdapter = new MessageAdapter(this);
         chatListView.setAdapter(messageAdapter);

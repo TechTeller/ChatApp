@@ -26,6 +26,8 @@ public class ChatHandler
 
     public static String myUsername;
 
+    public static int currentlySpeakingTo_Id;
+
     //Initialize the username and chatmessage
     public static void init(ChatActivity activity)
     {
@@ -39,6 +41,7 @@ public class ChatHandler
         params.put("username", message.getUsername());
         params.put("message", message.getMessage());
         params.put("timestamp", message.getTime());
+        params.put("toId", message.getToId());
 
         AsyncHttpClient client = new AsyncHttpClient();
         chatMessageList.add(message);

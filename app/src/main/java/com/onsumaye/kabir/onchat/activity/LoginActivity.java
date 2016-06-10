@@ -10,16 +10,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.gcm.GcmIntentService;
+import com.onsumaye.kabir.onchat.users.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -92,8 +102,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void onClickLogin(View v)
+    public void onClickLogin(final View v)
     {
+        v.setEnabled(false);
+        Toast.makeText(this, "Logging in...", Toast.LENGTH_LONG).show();
         //Perform checks against database here
         if(usernameEditText.getText().toString().equals("") || usernameEditText.getText().toString().equals("Username"))
         {
@@ -101,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            Intent intent = new Intent(this, UsersActivity.class);
+            final Intent intent = new Intent(this, UsersActivity.class);
             intent.putExtra("username", usernameEditText.getText().toString());
 
             if(rememberMe.isChecked())
@@ -116,9 +128,32 @@ public class LoginActivity extends AppCompatActivity {
                 registerGCM();
             }
 
-            startActivity(intent);
-        }
+            AsyncHttpClient client = new AsyncHttpClient();
+            RequestParams params = new RequestParams();
 
+            client.post(Config.SERVER_IP + "/login", params, new JsonHttpResponseHandler()
+            {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+                {
+                    System.out.println("Status code: " + statusCode);
+                    if(statusCode == 200)
+                    {
+                        v.setEnabled(true);
+                        startActivity(intent);
+                    }
+                    else Toast.makeText(getApplicationContext(), "Failed to connect to chat server.", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response)
+                {
+                    System.out.println("Got status code" + statusCode);
+                    Toast.makeText(getApplicationContext(), "Failed to connect to chat server.", Toast.LENGTH_SHORT).show();
+                }
+
+            });
+        }
     }
 
     // starting the service to register with GCM

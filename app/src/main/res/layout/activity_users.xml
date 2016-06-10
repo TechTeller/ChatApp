@@ -46,6 +46,8 @@
         android:id="@+id/addUserEditText"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
         android:visibility="invisible"
         />
 

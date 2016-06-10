@@ -39,11 +39,12 @@ public class UsersActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
         UserHandler.init();
+        ChatHandler.myUsername = getIntent().getStringExtra("username");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Users");
-        setTitleColor(R.color.colorPrimary);
+        setTitleColor(R.color.common_plus_signin_btn_text_light);
         userAdapter = new UserAdapter(getApplicationContext());
 
         usersListView = (ListView) findViewById(R.id.userListView);
@@ -57,14 +58,9 @@ public class UsersActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                //Display a edittext which asks for username
-                //On entering username and confirming, send request to the server which searches the database for user existing
-                //If the user doesn't exist, toast.make text
-                //Else if the user exists, get username and gcmId and make a new user and add them to the list
                 toggleAddUserButton();
             }
         });
-
 
     }
 

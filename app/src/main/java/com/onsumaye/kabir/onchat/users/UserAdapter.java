@@ -1,8 +1,10 @@
 package com.onsumaye.kabir.onchat.users;
 
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
+import com.onsumaye.kabir.onchat.activity.ChatActivity;
 
 public class UserAdapter extends BaseAdapter
 {
@@ -50,7 +54,7 @@ public class UserAdapter extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        User user = UserHandler.usersList.get(position);
+        final User user = UserHandler.usersList.get(position);
         Holder holder = new Holder();
 
         convertView = inflater.inflate(R.layout.user_list_view_item, null);
@@ -60,6 +64,18 @@ public class UserAdapter extends BaseAdapter
 
         holder.unreadMessageTextView.setText(String.valueOf(UserHandler.usersList.get(position).getUnreadMessages()));
         holder.usernameTextView.setText(UserHandler.usersList.get(position).getUsername());
+
+        convertView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ChatHandler.currentlySpeakingTo_Id = user.getId();
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
