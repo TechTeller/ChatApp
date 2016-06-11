@@ -42,7 +42,7 @@ public class MessageAdapter extends BaseAdapter
 
     public class Holder
     {
-        TextView username, message,timeStamp;
+        TextView message,timeStamp;
         ImageView deliveryIcon;
     }
 
@@ -65,13 +65,11 @@ public class MessageAdapter extends BaseAdapter
             convertView = setReceiverFormat();
         }
 
-        holder.username = (TextView) convertView.findViewById(R.id.userDisplay);
         holder.message = (TextView) convertView.findViewById(R.id.messageDisplay);
         holder.timeStamp = (TextView) convertView.findViewById(R.id.timeStamp);
         holder.deliveryIcon = (ImageView) convertView.findViewById(R.id.deliveryIcon);
 
         //Assign the chat message to the views
-        holder.username.setText(ChatHandler.chatMessageList.get(position).getUsername());
         holder.message.setText(ChatHandler.chatMessageList.get(position).getMessage());
         holder.timeStamp.setText(ChatHandler.getTimeStamp(ChatHandler.chatMessageList.get(position).getTime()));
 

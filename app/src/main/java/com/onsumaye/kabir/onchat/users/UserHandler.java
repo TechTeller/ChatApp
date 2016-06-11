@@ -24,4 +24,16 @@ public class UserHandler
         return false;
     }
 
+    public static User getUserById(int id)
+    {
+        for(User user : usersList)
+        {
+            if(user.getId() == id)
+            {
+                return user;
+            }
+        }
+        return null;
+    }
+
 }

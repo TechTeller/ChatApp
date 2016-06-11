@@ -26,6 +26,7 @@ public class ChatHandler
     private static ChatActivity chatActivity;
 
     public static String myUsername;
+    public static int myUserId;
 
     public static int currentlySpeakingTo_Id;
     public static String currentlySpeakingTo_username;
@@ -38,7 +39,6 @@ public class ChatHandler
         chatActivity = activity;
         chatMessageList = new ArrayList<ChatMessage>();
         chatMessageDatabaseHandler = new ChatMessageDatabaseHandler(activity);
-        System.out.println("Created the chatMessageDatabaseHandler.");
     }
 
     public static void sendMessage(final ChatMessage message)
@@ -58,11 +58,15 @@ public class ChatHandler
             public void onSuccess(int statusCode, Header[] headers, JSONObject response)
             {
                 System.out.println("Status code: " + statusCode);
-                try {
+                try
+                {
                     long id = response.getLong("id");
-                    System.out.println("Message ID : " + response.getInt("id"));
                     message.setId(id);
-                } catch (JSONException e) {
+
+                    ChatHandler.addChatMessage(message);
+                }
+                catch (JSONException e)
+                {
                     System.out.println("An exception occurred!");
                     e.printStackTrace();
                 }
@@ -117,5 +121,10 @@ public class ChatHandler
         cMessage = new ChatMessage(id, username, message, timestamp, currentlySpeakingTo_Id);
 
         chatMessageDatabaseHandler.addChatMessage(cMessage);
+    }
+
+    public static void addChatMessage(ChatMessage message)
+    {
+        chatMessageDatabaseHandler.addChatMessage(message);
     }
 }

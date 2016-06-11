@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
@@ -22,6 +23,7 @@ import com.onsumaye.kabir.onchat.ChatUtils.MessageAdapter;
 import com.onsumaye.kabir.onchat.ChatUtils.NotificationHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.users.UserHandler;
 
 
 public class ChatActivity extends AppCompatActivity
@@ -33,7 +35,7 @@ public class ChatActivity extends AppCompatActivity
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     public EditText chatBox;
-    Button sendButton;
+    ImageButton sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,10 +47,10 @@ public class ChatActivity extends AppCompatActivity
         ChatHandler.init(this);
         setTitle("");
         chatListView = (ListView) findViewById(R.id.chatListView);
-        sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton = (ImageButton) findViewById(R.id.sendButton);
         chatBox = (EditText) findViewById(R.id.chatBox);
 
-        ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(ChatHandler.currentlySpeakingTo_username.toLowerCase());
+        ChatHandler.chatMessageList.addAll(ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(UserHandler.getUserById(ChatHandler.currentlySpeakingTo_Id)));
 
         messageAdapter = new MessageAdapter(this);
         chatListView.setAdapter(messageAdapter);
@@ -82,6 +84,7 @@ public class ChatActivity extends AppCompatActivity
             }
         };
 
+        ChatHandler.scrollChatToBottom();
     }
 
 

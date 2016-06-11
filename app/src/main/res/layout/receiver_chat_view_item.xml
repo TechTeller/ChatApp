@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="start"
+    android:gravity="start"
+    android:orientation="horizontal">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:gravity="start"
+        >
+
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
         android:orientation="vertical"
-        android:background="#bbdefb">
+        android:background="@drawable/custom_border"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        >
 
         <TextView
-            android:id="@+id/userDisplay"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:textColor="#304ffe"
-            android:layout_gravity="start"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Message"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="start"
-            android:id="@+id/messageDisplay" />
+            android:id="@+id/messageDisplay"
+            android:layout_marginTop="16dp"
+            />
 
         <TextView
             android:id="@+id/timeStamp"
@@ -45,17 +48,8 @@
             android:textSize="12sp"
             android:text="0:00"
             />
+        </LinearLayout>
 
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="0.5">
-
-    </View>
-
-
 
 </LinearLayout>

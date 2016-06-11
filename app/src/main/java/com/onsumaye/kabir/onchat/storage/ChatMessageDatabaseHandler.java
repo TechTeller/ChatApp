@@ -7,9 +7,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
+import com.onsumaye.kabir.onchat.users.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
@@ -96,12 +100,14 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
         return cursor.getCount();
     }
 
-    public List<ChatMessage> getAllChatMessagesFromUser(String username)
+    public List<ChatMessage> getAllChatMessagesFromUser(User user)
     {
-        System.out.println("Getting messages of User: " + username);
+        System.out.println("Getting messages of User: " + user.getUsername());
         List<ChatMessage> chatMessageList = new ArrayList<ChatMessage>();
 
-        String selectQuery = "SELECT * FROM " + TABLE_MESSAGES + " WHERE username= \"" + username + "\"";
+
+        //Received messages
+        String selectQuery = "SELECT * FROM " + TABLE_MESSAGES + " WHERE username= \"" + user.getUsername() + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -117,12 +123,67 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
             while (cursor.moveToNext());
         }
 
+        //Sent messages
+        String selectQuery2 = "SELECT * FROM " + TABLE_MESSAGES + " WHERE username = \"" + ChatHandler.myUsername + "\" AND toId = \"" + user.getId() + "\"";
+        cursor = db.rawQuery(selectQuery2, null);
 
-        System.out.println("Message 1" + chatMessageList.get(0));
+        if (cursor.moveToFirst())
+        {
+            do
+            {
+                ChatMessage cMessage = new ChatMessage(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), Integer.parseInt(cursor.getString(4)));
+                chatMessageList.add(cMessage);
+
+            }
+            while (cursor.moveToNext());
+        }
+
+        //Sort based on timestamp
+
+        Collections.sort(chatMessageList, new Comparator<ChatMessage>() {
+            @Override
+            public int compare(ChatMessage lhs, ChatMessage rhs) {
+                if(lhs.getTime() > rhs.getTime())
+                    return 1;
+                else if(lhs.getTime() < rhs.getTime())
+                    return -1;
+                return 0;
+            }
+        });
+
+
+        if(!chatMessageList.isEmpty())
+            System.out.println("Message 1" + chatMessageList.get(0));
+        else System.out.println("List is empty. No messages to show.");
 
         // return ChatMessage list
         return chatMessageList;
     }
+
+    public List<ChatMessage> getAllChatMessages()
+    {
+        List<ChatMessage> chatMessageList = new ArrayList<ChatMessage>();
+
+
+        //Received messages
+        String selectQuery = "SELECT * FROM " + TABLE_MESSAGES;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                ChatMessage cMessage = new ChatMessage(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), Integer.parseInt(cursor.getString(4)));
+                chatMessageList.add(cMessage);
+            }
+            while (cursor.moveToNext());
+        }
+        return chatMessageList;
+    }
+
+
 
     public int updateChatMessage(ChatMessage cMessage)
     {
