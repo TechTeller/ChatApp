@@ -48,6 +48,8 @@ public class ChatActivity extends AppCompatActivity
         sendButton = (Button) findViewById(R.id.sendButton);
         chatBox = (EditText) findViewById(R.id.chatBox);
 
+        ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(ChatHandler.currentlySpeakingTo_username.toLowerCase());
+
         messageAdapter = new MessageAdapter(this);
         chatListView.setAdapter(messageAdapter);
         NotificationHandler.init(getApplicationContext());
@@ -88,7 +90,7 @@ public class ChatActivity extends AppCompatActivity
         if(chatBox.getText().toString().equals(""))
             return;
         //Send the chatMessage
-        ChatMessage message = new ChatMessage(ChatHandler.myUsername, chatBox.getText().toString(), System.currentTimeMillis() + "");
+        ChatMessage message = new ChatMessage(ChatHandler.myUsername, chatBox.getText().toString(), System.currentTimeMillis() + "", ChatHandler.currentlySpeakingTo_Id);
         ChatHandler.sendMessage(message);
         ChatHandler.scrollChatToBottom();
         chatBox.setText("");

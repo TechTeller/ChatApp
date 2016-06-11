@@ -15,6 +15,7 @@ import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.storage.UserDatabaseHandler;
 import com.onsumaye.kabir.onchat.users.User;
 import com.onsumaye.kabir.onchat.users.UserAdapter;
 import com.onsumaye.kabir.onchat.users.UserHandler;
@@ -31,6 +32,8 @@ public class UsersActivity extends AppCompatActivity
     UserAdapter userAdapter;
     EditText addUserEditText;
 
+    UserDatabaseHandler userDbHandler;
+
     ButtonState state = ButtonState.ADD;
 
     @Override
@@ -40,6 +43,8 @@ public class UsersActivity extends AppCompatActivity
         setContentView(R.layout.activity_users);
         UserHandler.init();
         ChatHandler.myUsername = getIntent().getStringExtra("username");
+
+        userDbHandler = new UserDatabaseHandler(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,6 +67,11 @@ public class UsersActivity extends AppCompatActivity
             }
         });
 
+        //Update users from the database
+        UserHandler.usersList.addAll(userDbHandler.getAllUsers());
+        userAdapter.notifyDataSetChanged();
+        usersListView.setAdapter(userAdapter);
+
     }
 
     private void toggleAddUserButton()
@@ -69,13 +79,22 @@ public class UsersActivity extends AppCompatActivity
         if(state == ButtonState.ADD)
         {
             addUserEditText.setText("");
+
+            addUserEditText.setAlpha(0.0f);
+
             addUserEditText.setVisibility(View.VISIBLE);
+
+            addUserEditText.animate()
+                    .alpha(1.0f);
+
             fab.setImageResource(R.drawable.ic_done_white_18px);
             state = ButtonState.ACCEPT;
         }
         else
         {
+            addUserEditText.animate().alpha(0.0f);
             addUserEditText.setVisibility(View.INVISIBLE);
+
             fab.setImageResource(R.drawable.ic_add_white_18px);
             if(!addUserEditText.getText().toString().equals(""))
             {
@@ -116,6 +135,10 @@ public class UsersActivity extends AppCompatActivity
                         User user = new User(id, username, gcmId, 0);
                         System.out.println(user.toString());
                         userAdapter.addUser(user);
+
+                        //Save it to the database
+                        userDbHandler.addUser(user);
+
                         usersListView.setAdapter(userAdapter);
                     }
                     else Toast.makeText(getApplicationContext(), "User does not exist.", Toast.LENGTH_SHORT).show();

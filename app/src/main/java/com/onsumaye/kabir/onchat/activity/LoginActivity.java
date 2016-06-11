@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (checkPlayServices())
             {
-                ChatHandler.myUsername = usernameEditText.getText().toString();
+                ChatHandler.myUsername = usernameEditText.getText().toString().toLowerCase();
                 registerGCM();
             }
 

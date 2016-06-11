@@ -22,25 +22,27 @@ public class GcmPushReceiver extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle bundle)
     {
-        final long id = Long.parseLong(bundle.getString("id"));
+        final int id = Integer.parseInt(bundle.getString("id"));
         final String username = bundle.getString("username");
         final String message = bundle.getString("message");
         final String timestamp = bundle.getString("timestamp");
+        final int toId = Integer.parseInt(bundle.getString("toId"));
         System.out.println(username + " " + message + " at " + timestamp + ".");
 
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
         {
             //Add to chatmessage
             ChatHandler.addMessageToActivity(id, username, message, timestamp);
+            ChatMessage cMessage = new ChatMessage(id, username, message, timestamp, toId);
+            //Save in chat messages database
 
             // app is in background, broadcast the push message
             Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
             pushNotification.putExtra("message", message);
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
-        } else
+        }
+        else
         {
-
             Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
             resultIntent.putExtra("message", message);
 

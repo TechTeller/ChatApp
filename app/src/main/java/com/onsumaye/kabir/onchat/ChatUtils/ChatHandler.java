@@ -7,6 +7,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.storage.ChatMessageDatabaseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,12 +28,17 @@ public class ChatHandler
     public static String myUsername;
 
     public static int currentlySpeakingTo_Id;
+    public static String currentlySpeakingTo_username;
+
+    public static ChatMessageDatabaseHandler chatMessageDatabaseHandler;
 
     //Initialize the username and chatmessage
     public static void init(ChatActivity activity)
     {
         chatActivity = activity;
         chatMessageList = new ArrayList<ChatMessage>();
+        chatMessageDatabaseHandler = new ChatMessageDatabaseHandler(activity);
+        System.out.println("Created the chatMessageDatabaseHandler.");
     }
 
     public static void sendMessage(final ChatMessage message)
@@ -91,14 +97,14 @@ public class ChatHandler
         });
     }
 
-    public static void addMessageToActivity(final long id, final String username, final String message, final String timestamp)
+    public static void addMessageToActivity(final int id, final String username, final String message, final String timestamp)
     {
         chatActivity.runOnUiThread(new Runnable()
         {
             public void run()
             {
                 final ChatMessage cMessage;
-                cMessage = new ChatMessage(username, message, timestamp);
+                cMessage = new ChatMessage(id, username, message, timestamp, currentlySpeakingTo_Id);
                 if (!cMessage.getUsername().equals(ChatHandler.myUsername))
                     chatActivity.messageAdapter.addMessage(cMessage);
 
@@ -106,6 +112,10 @@ public class ChatHandler
                 scrollChatToBottom();
             }
         });
-    }
 
+        final ChatMessage cMessage;
+        cMessage = new ChatMessage(id, username, message, timestamp, currentlySpeakingTo_Id);
+
+        chatMessageDatabaseHandler.addChatMessage(cMessage);
+    }
 }

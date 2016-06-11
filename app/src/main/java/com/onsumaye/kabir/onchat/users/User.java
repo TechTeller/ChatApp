@@ -48,4 +48,19 @@ public class User
         return id;
     }
 
+    public String getGcmId()
+    {
+        return gcmId;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setGcmId(String gcmId)
+    {
+        this.gcmId = gcmId;
+    }
+
 }

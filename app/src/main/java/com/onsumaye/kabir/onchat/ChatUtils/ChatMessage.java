@@ -12,12 +12,21 @@ public class ChatMessage
     private boolean sent;
     private int toId;
 
-    public ChatMessage(String username, String message, String time)
+    public ChatMessage(int id, String username, String message, String time, int toId)
+    {
+        this.id = id;
+        this.username = username;
+        this.message = message;
+        this.time = Long.parseLong(time);
+        this.toId = toId;
+    }
+
+    public ChatMessage(String username, String message, String time, int toId)
     {
         this.username = username;
         this.message = message;
         this.time = Long.parseLong(time);
-        this.toId = ChatHandler.currentlySpeakingTo_Id;
+        this.toId = toId;
     }
 
     public long getId()
@@ -68,5 +77,10 @@ public class ChatMessage
     public int getToId()
     {
         return toId;
+    }
+
+    public void setToId(int toId )
+    {
+        this.toId = toId;
     }
 }

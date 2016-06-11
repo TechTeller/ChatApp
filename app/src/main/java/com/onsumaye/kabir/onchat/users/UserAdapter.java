@@ -73,6 +73,7 @@ public class UserAdapter extends BaseAdapter
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ChatHandler.currentlySpeakingTo_Id = user.getId();
+                ChatHandler.currentlySpeakingTo_username = user.getUsername().toLowerCase();
                 context.startActivity(intent);
             }
         });
