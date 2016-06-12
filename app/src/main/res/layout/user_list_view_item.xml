@@ -2,85 +2,80 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/profileImage"
+        android:alpha="0.5"
+        />
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
+        <TextView
+            android:id="@+id/usernameTextView"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textSize="22sp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:id="@+id/lastMessage"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:text="Hello"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="13sp"
+            android:textColor="#7e7e7e"
+            android:layout_below="@id/usernameTextView"
+            android:singleLine="true"
+            />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:layout_marginLeft="4dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:id="@+id/profileImage"
+            android:background="@drawable/rounded_button"
             android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             />
 
         <TextView
-            android:id="@+id/usernameTextView"
+            android:id="@+id/unreadMessagesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kabir"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:textSize="20sp"
-            android:textColor="#000000"
+            android:text="1"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/profileImage"
+            android:gravity="center"
             />
-
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
-
-            <ImageView
-                android:id="@+id/unreadTextBackground"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/unread_message_outer_circle"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_centerHorizontal="true"
-                />
-
-            <ImageView
-                android:id="@+id/unreadTextInnerBackground"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/unread_message_inner_circle"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                />
-
-            <TextView
-                android:id="@+id/unreadMessagesTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textColor="#000000"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                />
-
-
-
-
-        </RelativeLayout>
 
     </RelativeLayout>
 

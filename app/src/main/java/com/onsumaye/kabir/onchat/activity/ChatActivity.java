@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -23,32 +26,41 @@ import com.onsumaye.kabir.onchat.ChatUtils.MessageAdapter;
 import com.onsumaye.kabir.onchat.ChatUtils.NotificationHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.dialogs.DeleteMessageConfirmationDialog;
 import com.onsumaye.kabir.onchat.users.UserHandler;
 
 
 public class ChatActivity extends AppCompatActivity
 {
-
-    public ListView chatListView;
     public MessageAdapter messageAdapter;
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
+    public ListView chatListView;
     public EditText chatBox;
-    ImageButton sendButton;
+    public ImageButton sendButton;
+    public Toolbar toolbar;
+    public ImageButton toolbar_deleteMessageButton;
+    public TextView toolbar_username;
+    public ImageView toolbar_profilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ChatHandler.init(this);
-        setTitle("");
+
+        //Initialization of all view elements    ---------------------------------------------------
         chatListView = (ListView) findViewById(R.id.chatListView);
         sendButton = (ImageButton) findViewById(R.id.sendButton);
+        toolbar_deleteMessageButton = (ImageButton) findViewById(R.id.toolbar_deleteMessageButton);
+        toolbar_username = (TextView) findViewById(R.id.toolbar_username);
+        toolbar_profilePicture = (ImageView) findViewById(R.id.toolbar_profilePicture);
         chatBox = (EditText) findViewById(R.id.chatBox);
+        //------------------------------------------------------------------------------------------
 
         ChatHandler.chatMessageList.addAll(ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(UserHandler.getUserById(ChatHandler.currentlySpeakingTo_Id)));
 
@@ -83,6 +95,16 @@ public class ChatActivity extends AppCompatActivity
                 }
             }
         };
+
+        toolbar_deleteMessageButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DeleteMessageConfirmationDialog dialog = new DeleteMessageConfirmationDialog();
+                dialog.show(getFragmentManager(), "OnChat");
+            }
+        });
 
         ChatHandler.scrollChatToBottom();
     }

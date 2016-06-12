@@ -8,11 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
-import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
 import com.onsumaye.kabir.onchat.R;
+import com.onsumaye.kabir.onchat.helper.Color;
 
 public class MessageAdapter extends BaseAdapter
 {
@@ -43,15 +42,15 @@ public class MessageAdapter extends BaseAdapter
     public class Holder
     {
         TextView message,timeStamp;
+        LinearLayout chatBackground;
         ImageView deliveryIcon;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        ChatMessage message = ChatHandler.chatMessageList.get(position);
+        final ChatMessage message = ChatHandler.chatMessageList.get(position);
         Holder holder = new Holder();
-
 
         //Set the gravity of the whole thing depending on whether the username matches or not
         if(message.getUsername().equals(ChatHandler.myUsername))
@@ -65,13 +64,72 @@ public class MessageAdapter extends BaseAdapter
             convertView = setReceiverFormat();
         }
 
+        //Initialize the view elements
         holder.message = (TextView) convertView.findViewById(R.id.messageDisplay);
         holder.timeStamp = (TextView) convertView.findViewById(R.id.timeStamp);
-        holder.deliveryIcon = (ImageView) convertView.findViewById(R.id.deliveryIcon);
+        holder.chatBackground = (LinearLayout) convertView.findViewById(R.id.chatBackground);
+        //holder.deliveryIcon = (ImageView) convertView.findViewById(R.id.deliveryIcon);
+
 
         //Assign the chat message to the views
         holder.message.setText(ChatHandler.chatMessageList.get(position).getMessage());
         holder.timeStamp.setText(ChatHandler.getTimeStamp(ChatHandler.chatMessageList.get(position).getTime()));
+
+        if(!message.isSelected())
+        {
+            holder.chatBackground.setBackgroundColor(Color.chat_originalColor);
+        }
+        else
+        {
+            holder.chatBackground.setBackgroundColor(Color.chat_selectedColor);
+        }
+
+
+        holder.chatBackground.setOnLongClickListener(new View.OnLongClickListener()
+        {
+            @Override
+            public boolean onLongClick(View v)
+            {
+                if(ChatHandler.chatMode == ChatHandler.ChatMode.NORMAL)
+                {
+                    v.setBackgroundColor(Color.chat_selectedColor);
+                    message.setSelected(true);
+                    ChatHandler.chatMode = ChatHandler.ChatMode.SELECTION;
+                    ChatHandler.selectedChatMessageList.add(message);
+                    ChatHandler.toggleActionBar();
+                }
+                return true;
+            }
+        });
+
+        holder.chatBackground.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(ChatHandler.chatMode == ChatHandler.ChatMode.SELECTION)
+                {
+                    if(!message.isSelected())
+                    {
+                        message.setSelected(true);
+                        v.setBackgroundColor(Color.chat_selectedColor);
+                        ChatHandler.selectedChatMessageList.add(message);
+                    }
+                    else
+                    {
+                        message.setSelected(false);
+                        v.setBackgroundColor(Color.chat_originalColor);
+                        ChatHandler.selectedChatMessageList.remove(message);
+
+                        if(ChatHandler.selectedChatMessageList.isEmpty())
+                        {
+                            ChatHandler.chatMode = ChatHandler.ChatMode.NORMAL;
+                            ChatHandler.toggleActionBar();
+                        }
+                    }
+                }
+            }
+        });
 
         return convertView;
     }
@@ -79,6 +137,12 @@ public class MessageAdapter extends BaseAdapter
     public void addMessage(ChatMessage message)
     {
         ChatHandler.chatMessageList.add(message);
+        notifyDataSetChanged();
+    }
+
+    public void removeMessage(ChatMessage message)
+    {
+        ChatHandler.chatMessageList.remove(message);
         notifyDataSetChanged();
     }
 
@@ -100,6 +164,8 @@ public class MessageAdapter extends BaseAdapter
             
         }
     }
+
+
 
 
 }

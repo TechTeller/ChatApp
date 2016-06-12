@@ -11,6 +11,7 @@ public class ChatMessage
     private long time;
     private boolean sent;
     private int toId;
+    private boolean isSelected;
 
     public ChatMessage(int id, String username, String message, String time, int toId)
     {
@@ -19,6 +20,7 @@ public class ChatMessage
         this.message = message;
         this.time = Long.parseLong(time);
         this.toId = toId;
+        isSelected = false;
     }
 
     public ChatMessage(String username, String message, String time, int toId)
@@ -27,6 +29,7 @@ public class ChatMessage
         this.message = message;
         this.time = Long.parseLong(time);
         this.toId = toId;
+        isSelected = false;
     }
 
     public long getId()
@@ -82,5 +85,15 @@ public class ChatMessage
     public void setToId(int toId )
     {
         this.toId = toId;
+    }
+
+    public boolean isSelected()
+    {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected)
+    {
+        isSelected = selected;
     }
 }

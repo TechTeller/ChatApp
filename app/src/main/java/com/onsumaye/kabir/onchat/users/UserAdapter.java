@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
+import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
 
@@ -47,8 +48,7 @@ public class UserAdapter extends BaseAdapter
 
     private class Holder
     {
-        TextView usernameTextView;
-        TextView unreadMessageTextView;
+        TextView usernameTextView, unreadMessageCounter, lastMessageReceived;
     }
 
     @Override
@@ -59,11 +59,15 @@ public class UserAdapter extends BaseAdapter
 
         convertView = inflater.inflate(R.layout.user_list_view_item, null);
 
-        holder.unreadMessageTextView = (TextView) convertView.findViewById(R.id.unreadMessagesTextView);
+        holder.unreadMessageCounter = (TextView) convertView.findViewById(R.id.unreadMessagesTextView);
         holder.usernameTextView = (TextView) convertView.findViewById(R.id.usernameTextView);
+        holder.lastMessageReceived = (TextView) convertView.findViewById(R.id.lastMessage);
 
-        holder.unreadMessageTextView.setText(String.valueOf(UserHandler.usersList.get(position).getUnreadMessages()));
+        holder.unreadMessageCounter.setText(String.valueOf(UserHandler.usersList.get(position).getUnreadMessages()));
         holder.usernameTextView.setText(UserHandler.usersList.get(position).getUsername());
+        int lastMessageIndex = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).size() - 1;
+        ChatMessage lastMessage = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).get(lastMessageIndex);
+        holder.lastMessageReceived.setText(lastMessage.getMessage());
 
         convertView.setOnClickListener(new View.OnClickListener()
         {

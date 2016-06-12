@@ -41,7 +41,7 @@ public class UsersActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
-        UserHandler.init();
+        UserHandler.init(this);
         ChatHandler.myUsername = getIntent().getStringExtra("username");
 
         userDbHandler = new UserDatabaseHandler(this);
@@ -162,6 +162,7 @@ public class UsersActivity extends AppCompatActivity
     public void onResume()
     {
         super.onResume();
+        usersListView.setAdapter(userAdapter);
     }
 
     private enum ButtonState

@@ -1,5 +1,6 @@
 package com.onsumaye.kabir.onchat.ChatUtils;
 
+import android.view.View;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -23,6 +24,8 @@ import cz.msebera.android.httpclient.Header;
 public class ChatHandler
 {
     public static List<ChatMessage> chatMessageList;
+    public static List<ChatMessage> selectedChatMessageList;
+
     private static ChatActivity chatActivity;
 
     public static String myUsername;
@@ -33,12 +36,20 @@ public class ChatHandler
 
     public static ChatMessageDatabaseHandler chatMessageDatabaseHandler;
 
+    public enum ChatMode
+    {
+        NORMAL, SELECTION
+    }
+
+    public static ChatMode chatMode;
+
     //Initialize the username and chatmessage
     public static void init(ChatActivity activity)
     {
         chatActivity = activity;
         chatMessageList = new ArrayList<ChatMessage>();
-        chatMessageDatabaseHandler = new ChatMessageDatabaseHandler(activity);
+        selectedChatMessageList = new ArrayList<ChatMessage>();
+        chatMode = ChatMode.NORMAL;
     }
 
     public static void sendMessage(final ChatMessage message)
@@ -126,5 +137,35 @@ public class ChatHandler
     public static void addChatMessage(ChatMessage message)
     {
         chatMessageDatabaseHandler.addChatMessage(message);
+    }
+
+    public static void toggleActionBar()
+    {
+        if(chatMode == ChatMode.SELECTION)
+        {
+            chatActivity.toolbar_profilePicture.setVisibility(View.INVISIBLE);
+            chatActivity.toolbar_username.setVisibility(View.INVISIBLE);
+            chatActivity.toolbar_deleteMessageButton.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            chatActivity.toolbar_profilePicture.setVisibility(View.VISIBLE);
+            chatActivity.toolbar_username.setVisibility(View.VISIBLE);
+            chatActivity.toolbar_deleteMessageButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public static void deleteMessage()
+    {
+        for(ChatMessage message : selectedChatMessageList)
+        {
+            //Delete message from the message adapter
+            chatActivity.messageAdapter.removeMessage(message);
+            //Delete message from the database so it does not appear on relaunching the activity
+            chatMessageDatabaseHandler.deleteChatMessage(message);
+        }
+        selectedChatMessageList.clear();
+        chatMode = ChatMode.NORMAL;
+        toggleActionBar();
     }
 }

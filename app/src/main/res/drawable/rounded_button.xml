@@ -4,7 +4,7 @@
     android:shape="oval">
 
     <solid
-        android:color="@color/chatButtonPurple"/>
+        android:color="?attr/colorControlActivated"/>
 
     <size
         android:width="40dp"

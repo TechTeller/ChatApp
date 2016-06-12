@@ -21,10 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:divider="#00000000"
-        android:dividerHeight="12dp"
+        android:divider="#3f3f3f"
+        android:dividerHeight="0.4dp"
         android:id="@+id/userListView"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@+id/toolbar"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addUserButton"

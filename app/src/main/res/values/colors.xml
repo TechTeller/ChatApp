@@ -3,6 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="chatMessage">#e9eaf3 </color>
+    <color name="chatMessage">#cacaca</color>
     <color name="chatButtonPurple">#aa00ff</color>
 </resources>
