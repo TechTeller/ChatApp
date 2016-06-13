@@ -26,6 +26,7 @@ import com.onsumaye.kabir.onchat.ChatUtils.MessageAdapter;
 import com.onsumaye.kabir.onchat.ChatUtils.NotificationHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.app.StateHolder;
 import com.onsumaye.kabir.onchat.dialogs.DeleteMessageConfirmationDialog;
 import com.onsumaye.kabir.onchat.users.UserHandler;
 
@@ -137,6 +138,7 @@ public class ChatActivity extends AppCompatActivity
 
     protected void onResume() {
         super.onResume();
+        StateHolder.appState = StateHolder.AppState.CHAT;
 
         // register GCM registration complete receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,

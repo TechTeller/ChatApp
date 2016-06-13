@@ -1,6 +1,11 @@
 package com.onsumaye.kabir.onchat.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +20,7 @@ import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.app.StateHolder;
 import com.onsumaye.kabir.onchat.storage.UserDatabaseHandler;
 import com.onsumaye.kabir.onchat.users.User;
 import com.onsumaye.kabir.onchat.users.UserAdapter;
@@ -27,10 +33,12 @@ import cz.msebera.android.httpclient.Header;
 
 public class UsersActivity extends AppCompatActivity
 {
-    ListView usersListView;
+    public ListView usersListView;
     FloatingActionButton fab;
     UserAdapter userAdapter;
     EditText addUserEditText;
+
+    BroadcastReceiver receiver;
 
     UserDatabaseHandler userDbHandler;
 
@@ -43,7 +51,7 @@ public class UsersActivity extends AppCompatActivity
         setContentView(R.layout.activity_users);
         UserHandler.init(this);
         ChatHandler.myUsername = getIntent().getStringExtra("username");
-
+;
         userDbHandler = new UserDatabaseHandler(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,6 +80,29 @@ public class UsersActivity extends AppCompatActivity
         userAdapter.notifyDataSetChanged();
         usersListView.setAdapter(userAdapter);
 
+        receiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                String s = intent.getStringExtra("refreshAdapter");
+                refreshAdapter();
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
+                new IntentFilter("refreshAdapterIntent")
+        );
+    }
+
+    @Override
+    protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        super.onStop();
     }
 
     private void toggleAddUserButton()
@@ -162,6 +193,13 @@ public class UsersActivity extends AppCompatActivity
     public void onResume()
     {
         super.onResume();
+        StateHolder.appState = StateHolder.AppState.USERS;
+        usersListView.setAdapter(userAdapter);
+    }
+
+    public void refreshAdapter()
+    {
+        userAdapter.notifyDataSetChanged();
         usersListView.setAdapter(userAdapter);
     }
 

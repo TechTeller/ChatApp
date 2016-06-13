@@ -10,6 +10,8 @@ public class MyApplication extends Application
     public static final String TAG = MyApplication.class
             .getSimpleName();
 
+    public static final String PACKAGE_NAME = MyApplication.class.getPackage().getName();
+
     private static MyApplication mInstance;
 
     private MyPreferenceManager pref;

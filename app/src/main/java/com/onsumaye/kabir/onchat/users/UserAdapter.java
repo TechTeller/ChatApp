@@ -65,9 +65,16 @@ public class UserAdapter extends BaseAdapter
 
         holder.unreadMessageCounter.setText(String.valueOf(UserHandler.usersList.get(position).getUnreadMessages()));
         holder.usernameTextView.setText(UserHandler.usersList.get(position).getUsername());
-        int lastMessageIndex = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).size() - 1;
-        ChatMessage lastMessage = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).get(lastMessageIndex);
-        holder.lastMessageReceived.setText(lastMessage.getMessage());
+        if(!ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).isEmpty())
+        {
+            int lastMessageIndex = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).size() - 1;
+            ChatMessage lastMessage = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).get(lastMessageIndex);
+            holder.lastMessageReceived.setText(lastMessage.getMessage());
+        }
+        else
+        {
+            holder.lastMessageReceived.setText("");
+        }
 
         convertView.setOnClickListener(new View.OnClickListener()
         {

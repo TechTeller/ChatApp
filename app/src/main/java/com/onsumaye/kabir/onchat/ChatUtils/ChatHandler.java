@@ -127,11 +127,6 @@ public class ChatHandler
                 scrollChatToBottom();
             }
         });
-
-        final ChatMessage cMessage;
-        cMessage = new ChatMessage(id, username, message, timestamp, currentlySpeakingTo_Id);
-
-        chatMessageDatabaseHandler.addChatMessage(cMessage);
     }
 
     public static void addChatMessage(ChatMessage message)

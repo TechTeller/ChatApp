@@ -23,6 +23,7 @@ import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.app.StateHolder;
 import com.onsumaye.kabir.onchat.gcm.GcmIntentService;
 import com.onsumaye.kabir.onchat.users.User;
 
@@ -178,6 +179,13 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        StateHolder.appState = StateHolder.AppState.LOGIN;
     }
 
 

@@ -10,6 +10,9 @@ import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
 import com.onsumaye.kabir.onchat.app.Config;
+import com.onsumaye.kabir.onchat.app.MyApplication;
+import com.onsumaye.kabir.onchat.app.StateHolder;
+import com.onsumaye.kabir.onchat.users.UserHandler;
 
 import org.json.JSONObject;
 
@@ -31,10 +34,18 @@ public class GcmPushReceiver extends GcmListenerService {
 
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
         {
-            //Add to chatmessage
-            ChatHandler.addMessageToActivity(id, username, message, timestamp);
-            ChatMessage cMessage = new ChatMessage(id, username, message, timestamp, toId);
+            //Add to chat activity if activity is open otherwise only add to database
+            if(StateHolder.appState == StateHolder.AppState.CHAT)
+                ChatHandler.addMessageToActivity(id, username, message, timestamp);
+
             //Save in chat messages database
+            ChatMessage cMessage;
+            cMessage = new ChatMessage(id, username, message, timestamp, toId);
+
+            ChatHandler.chatMessageDatabaseHandler.addChatMessage(cMessage);
+
+            //Update the adapter view
+            refreshUserAdapter();
 
             // app is in background, broadcast the push message
             Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
@@ -57,5 +68,13 @@ public class GcmPushReceiver extends GcmListenerService {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
+    }
+
+    private void refreshUserAdapter()
+    {
+        Intent intent = new Intent("refreshAdapterIntent");
+        intent.putExtra("Message", "refreshAdapter");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
     }
 }
