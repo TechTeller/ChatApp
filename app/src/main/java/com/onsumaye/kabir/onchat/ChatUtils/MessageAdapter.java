@@ -84,7 +84,6 @@ public class MessageAdapter extends BaseAdapter
             holder.chatBackground.setBackgroundColor(Color.chat_selectedColor);
         }
 
-
         holder.chatBackground.setOnLongClickListener(new View.OnLongClickListener()
         {
             @Override
@@ -130,6 +129,14 @@ public class MessageAdapter extends BaseAdapter
                 }
             }
         });
+
+        if(!ChatHandler.readChatMessageList.contains(message))
+        {
+            holder.chatBackground.setAlpha(0.0f);
+            holder.chatBackground.animate()
+                    .alpha(1.0f);
+            ChatHandler.readChatMessageList.add(message);
+        }
 
         return convertView;
     }

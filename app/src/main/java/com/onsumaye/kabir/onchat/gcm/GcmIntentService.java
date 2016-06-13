@@ -127,16 +127,22 @@ public class GcmIntentService extends IntentService
         GcmPubSub pubSub = GcmPubSub.getInstance(getApplicationContext());
         InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
         String token = null;
-        try {
+        try
+        {
             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            if (token != null) {
+            if (token != null)
+            {
                 pubSub.subscribe(token, "/topics/" + topic, null);
                 Log.e(TAG, "Subscribed to topic: " + topic);
-            } else {
+            }
+            else
+            {
                 Log.e(TAG, "error: gcm registration id is null");
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Log.e(TAG, "Topic subscribe error. Topic: " + topic + ", error: " + e.getMessage());
             Toast.makeText(getApplicationContext(), "Topic subscribe error. Topic: " + topic + ", error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }

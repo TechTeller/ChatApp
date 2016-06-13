@@ -1,5 +1,6 @@
 package com.onsumaye.kabir.onchat.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,11 +9,15 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText usernameEditText;
     CheckBox rememberMe;
+
 
     SharedPreferences.Editor editor;
 
@@ -101,11 +107,32 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
+        usernameEditText.setOnKeyListener(new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if(event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_ENTER:
+                            onClickLogin(findViewById(R.id.loginButton));
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     public void onClickLogin(final View v)
     {
         v.setEnabled(false);
+
+
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+
         Toast.makeText(this, "Logging in...", Toast.LENGTH_LONG).show();
         //Perform checks against database here
         if(usernameEditText.getText().toString().equals("") || usernameEditText.getText().toString().equals("Username"))

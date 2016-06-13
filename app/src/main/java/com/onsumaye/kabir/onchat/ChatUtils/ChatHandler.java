@@ -25,6 +25,7 @@ public class ChatHandler
 {
     public static List<ChatMessage> chatMessageList;
     public static List<ChatMessage> selectedChatMessageList;
+    public static List<ChatMessage> readChatMessageList;
 
     private static ChatActivity chatActivity;
 
@@ -49,6 +50,7 @@ public class ChatHandler
         chatActivity = activity;
         chatMessageList = new ArrayList<ChatMessage>();
         selectedChatMessageList = new ArrayList<ChatMessage>();
+        readChatMessageList = new ArrayList<ChatMessage>();
         chatMode = ChatMode.NORMAL;
     }
 
@@ -103,10 +105,12 @@ public class ChatHandler
 
 
     public static void scrollChatToBottom() {
-        chatActivity.chatListView.post(new Runnable() {
+        chatActivity.chatListView.post(new Runnable()
+        {
             @Override
-            public void run() {
-                // Select the last row so it will scroll into view
+            public void run()
+            {
+                // Select the last row so it will scroll into view=
                 chatActivity.chatListView.setSelection(chatActivity.messageAdapter.getCount() - 1);
             }
         });

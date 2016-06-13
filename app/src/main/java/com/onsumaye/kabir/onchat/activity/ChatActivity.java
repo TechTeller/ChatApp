@@ -107,6 +107,12 @@ public class ChatActivity extends AppCompatActivity
             }
         });
 
+        String s1 = ChatHandler.currentlySpeakingTo_username.substring(0, 1).toUpperCase();
+        String nameCapitalized = s1 + ChatHandler.currentlySpeakingTo_username.substring(1);
+
+        toolbar_username.setText(nameCapitalized);
+
+
         ChatHandler.scrollChatToBottom();
     }
 

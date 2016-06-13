@@ -64,6 +64,7 @@ public class UserAdapter extends BaseAdapter
         holder.lastMessageReceived = (TextView) convertView.findViewById(R.id.lastMessage);
 
         holder.unreadMessageCounter.setText(String.valueOf(UserHandler.usersList.get(position).getUnreadMessages()));
+        holder.unreadMessageCounter.setBackground(context.getResources().getDrawable(R.drawable.unread_chat_background));
         holder.usernameTextView.setText(UserHandler.usersList.get(position).getUsername());
         if(!ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).isEmpty())
         {
