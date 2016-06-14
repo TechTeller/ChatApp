@@ -30,6 +30,7 @@ import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.app.StateHolder;
 import com.onsumaye.kabir.onchat.gcm.GcmIntentService;
+import com.onsumaye.kabir.onchat.storage.UserDatabaseHandler;
 import com.onsumaye.kabir.onchat.users.User;
 
 import org.json.JSONException;
@@ -129,9 +130,15 @@ public class LoginActivity extends AppCompatActivity {
     {
         v.setEnabled(false);
 
-
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        try
+        {
+            inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        }
+        catch (java.lang.NullPointerException e)
+        {
+            e.printStackTrace();
+        }
 
         Toast.makeText(this, "Logging in...", Toast.LENGTH_LONG).show();
         //Perform checks against database here
@@ -152,7 +159,6 @@ public class LoginActivity extends AppCompatActivity {
 
             if (checkPlayServices())
             {
-                ChatHandler.myUsername = usernameEditText.getText().toString().toLowerCase();
                 registerGCM();
             }
 
@@ -182,6 +188,8 @@ public class LoginActivity extends AppCompatActivity {
 
             });
         }
+
+        ChatHandler.myUsername = usernameEditText.getText().toString().toLowerCase();
     }
 
     // starting the service to register with GCM

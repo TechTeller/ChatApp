@@ -80,7 +80,6 @@ public class ChatHandler
                 }
                 catch (JSONException e)
                 {
-                    System.out.println("An exception occurred!");
                     e.printStackTrace();
                 }
                 message.setSent(true);

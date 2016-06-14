@@ -22,7 +22,7 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
 
     public static final String DATABASE_NAME = "messageDatabase";
 
-    public static final String TABLE_MESSAGES = "messages";
+    public static final String TABLE_MESSAGES = "messages_" + ChatHandler.myUsername;
 
     //ChatMessages Table Column Names
     public static final String KEY_ID = "id";
@@ -47,8 +47,26 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
                 + KEY_TOID + " INT"
                 + ")";
         db.execSQL(CREATE_MESSAGES_TABLE);
+    }
 
-        System.out.println("Created chat messages table in database.");
+    public void createDatabase()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String CREATE_MESSAGES_TABLE = "CREATE TABLE "  + TABLE_MESSAGES + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_USERNAME + " TEXT,"
+                + KEY_MESSAGE + " TEXT,"
+                + KEY_TIMESTAMP + " INT,"
+                + KEY_TOID + " INT"
+                + ")";
+        try
+        {
+            db.execSQL(CREATE_MESSAGES_TABLE);
+        }catch( android.database.sqlite.SQLiteException e)
+        {
+            //Table already exists
+        }
     }
 
     @Override
@@ -102,7 +120,6 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
 
     public List<ChatMessage> getAllChatMessagesFromUser(User user)
     {
-        System.out.println("Getting messages of User: " + user.getUsername());
         List<ChatMessage> chatMessageList = new ArrayList<ChatMessage>();
 
 
@@ -151,11 +168,6 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
                 return 0;
             }
         });
-
-
-        if(!chatMessageList.isEmpty())
-            System.out.println("Message 1" + chatMessageList.get(0));
-        else System.out.println("List is empty. No messages to show.");
 
         // return ChatMessage list
         return chatMessageList;

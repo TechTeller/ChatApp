@@ -30,7 +30,6 @@ public class GcmPushReceiver extends GcmListenerService {
         final String message = bundle.getString("message");
         final String timestamp = bundle.getString("timestamp");
         final int toId = Integer.parseInt(bundle.getString("toId"));
-        System.out.println(username + " " + message + " at " + timestamp + ".");
 
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
         {

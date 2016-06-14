@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
 import com.onsumaye.kabir.onchat.users.User;
 import com.onsumaye.kabir.onchat.users.UserHandler;
 
@@ -19,7 +20,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper
 
     public static final String DATABASE_NAME = "userDatabase";
 
-    public static final String TABLE_USERS = "users";
+    public static  String TABLE_USERS;
 
     //Users Table Column Names
     public static final String KEY_ID = "id";
@@ -29,6 +30,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper
     public UserDatabaseHandler(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        TABLE_USERS = "users_" + ChatHandler.myUsername;
     }
 
     @Override
@@ -38,6 +40,22 @@ public class UserDatabaseHandler extends SQLiteOpenHelper
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME + " TEXT,"
                 + KEY_GCMID + " TEXT" + ")";
         db.execSQL(CREATE_USERS_TABLE);
+    }
+
+    public void createDatabase()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String CREATE_USERS_TABLE = "CREATE TABLE "  + TABLE_USERS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME + " TEXT,"
+                + KEY_GCMID + " TEXT" + ")";
+        try
+        {
+            db.execSQL(CREATE_USERS_TABLE);
+        }catch( android.database.sqlite.SQLiteException e)
+        {
+            //Table already exists
+        }
     }
 
     @Override
@@ -91,6 +109,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper
         List<User> UserList = new ArrayList<User>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_USERS;
+        System.out.println("Getting all users from table: " + TABLE_USERS);
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

@@ -51,8 +51,8 @@ public class UsersActivity extends AppCompatActivity
         setContentView(R.layout.activity_users);
         UserHandler.init(this);
         ChatHandler.myUsername = getIntent().getStringExtra("username");
-;
         userDbHandler = new UserDatabaseHandler(this);
+        userDbHandler.createDatabase();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -164,7 +164,6 @@ public class UsersActivity extends AppCompatActivity
                         String gcmId = response.getString("gcmId");
 
                         User user = new User(id, username, gcmId, 0);
-                        System.out.println(user.toString());
                         userAdapter.addUser(user);
 
                         //Save it to the database
@@ -206,5 +205,13 @@ public class UsersActivity extends AppCompatActivity
     private enum ButtonState
     {
         ADD, ACCEPT
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        //Logging out
+        UserHandler.usersList.clear();
     }
 }
