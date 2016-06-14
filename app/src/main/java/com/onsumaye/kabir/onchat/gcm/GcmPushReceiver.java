@@ -6,15 +6,11 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
-import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
+import com.onsumaye.kabir.onchat.chat.ChatHandler;
+import com.onsumaye.kabir.onchat.chat.ChatMessage;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
 import com.onsumaye.kabir.onchat.app.Config;
-import com.onsumaye.kabir.onchat.app.MyApplication;
 import com.onsumaye.kabir.onchat.app.StateHolder;
-import com.onsumaye.kabir.onchat.users.UserHandler;
-
-import org.json.JSONObject;
 
 public class GcmPushReceiver extends GcmListenerService {
 

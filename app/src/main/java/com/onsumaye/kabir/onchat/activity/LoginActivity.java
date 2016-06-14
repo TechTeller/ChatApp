@@ -12,12 +12,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,15 +22,12 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
+import com.onsumaye.kabir.onchat.chat.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.app.StateHolder;
 import com.onsumaye.kabir.onchat.gcm.GcmIntentService;
-import com.onsumaye.kabir.onchat.storage.UserDatabaseHandler;
-import com.onsumaye.kabir.onchat.users.User;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;

@@ -1,9 +1,7 @@
 package com.onsumaye.kabir.onchat.users;
 
 
-import android.content.Context;
-
-import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
+import com.onsumaye.kabir.onchat.chat.ChatHandler;
 import com.onsumaye.kabir.onchat.activity.UsersActivity;
 import com.onsumaye.kabir.onchat.storage.ChatMessageDatabaseHandler;
 import com.onsumaye.kabir.onchat.storage.UserDatabaseHandler;

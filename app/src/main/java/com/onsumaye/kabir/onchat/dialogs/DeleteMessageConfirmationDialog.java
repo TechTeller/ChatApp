@@ -7,7 +7,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
+import com.onsumaye.kabir.onchat.chat.ChatHandler;
 
 public class DeleteMessageConfirmationDialog extends DialogFragment
 {

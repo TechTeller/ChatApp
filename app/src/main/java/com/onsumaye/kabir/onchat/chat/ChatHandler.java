@@ -1,4 +1,4 @@
-package com.onsumaye.kabir.onchat.ChatUtils;
+package com.onsumaye.kabir.onchat.chat;
 
 import android.view.View;
 import android.widget.Toast;

@@ -1,4 +1,4 @@
-package com.onsumaye.kabir.onchat.ChatUtils;
+package com.onsumaye.kabir.onchat.chat;
 
 import android.app.Activity;
 import android.app.Service;

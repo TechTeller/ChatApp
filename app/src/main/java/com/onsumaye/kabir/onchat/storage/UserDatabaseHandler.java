@@ -7,9 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
+import com.onsumaye.kabir.onchat.chat.ChatHandler;
 import com.onsumaye.kabir.onchat.users.User;
-import com.onsumaye.kabir.onchat.users.UserHandler;
 
 import java.util.ArrayList;
 import java.util.List;

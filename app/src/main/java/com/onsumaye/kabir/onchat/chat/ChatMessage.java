@@ -1,7 +1,4 @@
-package com.onsumaye.kabir.onchat.ChatUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+package com.onsumaye.kabir.onchat.chat;
 
 public class ChatMessage
 {

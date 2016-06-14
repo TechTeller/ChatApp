@@ -1,7 +1,6 @@
 package com.onsumaye.kabir.onchat.users;
 
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.onsumaye.kabir.onchat.ChatUtils.ChatHandler;
-import com.onsumaye.kabir.onchat.ChatUtils.ChatMessage;
+import com.onsumaye.kabir.onchat.chat.ChatHandler;
+import com.onsumaye.kabir.onchat.chat.ChatMessage;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
 
