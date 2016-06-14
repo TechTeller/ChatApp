@@ -22,7 +22,7 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
 
     public static final String DATABASE_NAME = "messageDatabase";
 
-    public static final String TABLE_MESSAGES = "messages_" + ChatHandler.myUsername;
+    public static String TABLE_MESSAGES;
 
     //ChatMessages Table Column Names
     public static final String KEY_ID = "id";
@@ -34,6 +34,7 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
     public ChatMessageDatabaseHandler(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        TABLE_MESSAGES = "messages_" + ChatHandler.myUsername;
     }
 
     @Override
