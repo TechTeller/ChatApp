@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.onsumaye.kabir.onchat.R;
-import com.onsumaye.kabir.onchat.helper.Color;
+import com.onsumaye.kabir.onchat.helper.Common;
 
 public class MessageAdapter extends BaseAdapter
 {
@@ -77,11 +77,11 @@ public class MessageAdapter extends BaseAdapter
 
         if(!message.isSelected())
         {
-            holder.chatBackground.setBackgroundColor(Color.chat_originalColor);
+            holder.chatBackground.setBackgroundColor(Common.chat_originalColor);
         }
         else
         {
-            holder.chatBackground.setBackgroundColor(Color.chat_selectedColor);
+            holder.chatBackground.setBackgroundColor(Common.chat_selectedColor);
         }
 
         holder.chatBackground.setOnLongClickListener(new View.OnLongClickListener()
@@ -91,7 +91,7 @@ public class MessageAdapter extends BaseAdapter
             {
                 if(ChatHandler.chatMode == ChatHandler.ChatMode.NORMAL)
                 {
-                    v.setBackgroundColor(Color.chat_selectedColor);
+                    v.setBackgroundColor(Common.chat_selectedColor);
                     message.setSelected(true);
                     ChatHandler.chatMode = ChatHandler.ChatMode.SELECTION;
                     ChatHandler.selectedChatMessageList.add(message);
@@ -111,13 +111,13 @@ public class MessageAdapter extends BaseAdapter
                     if(!message.isSelected())
                     {
                         message.setSelected(true);
-                        v.setBackgroundColor(Color.chat_selectedColor);
+                        v.setBackgroundColor(Common.chat_selectedColor);
                         ChatHandler.selectedChatMessageList.add(message);
                     }
                     else
                     {
                         message.setSelected(false);
-                        v.setBackgroundColor(Color.chat_originalColor);
+                        v.setBackgroundColor(Common.chat_originalColor);
                         ChatHandler.selectedChatMessageList.remove(message);
 
                         if(ChatHandler.selectedChatMessageList.isEmpty())

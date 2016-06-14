@@ -31,7 +31,10 @@ public class GcmPushReceiver extends GcmListenerService {
         {
             //Add to chat activity if activity is open otherwise only add to database
             if(StateHolder.appState == StateHolder.AppState.CHAT)
-                ChatHandler.addMessageToActivity(id, username, message, timestamp);
+            {
+                ChatMessage chatMessage = new ChatMessage(id, username, message, timestamp, ChatHandler.currentlySpeakingTo_Id, true);
+                ChatHandler.addMessageToActivity(chatMessage);
+            }
 
             //Save in chat messages database
             ChatMessage cMessage;

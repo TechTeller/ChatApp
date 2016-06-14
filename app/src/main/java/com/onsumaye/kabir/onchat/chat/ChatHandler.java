@@ -9,6 +9,7 @@ import com.loopj.android.http.RequestParams;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.storage.ChatMessageDatabaseHandler;
+import com.onsumaye.kabir.onchat.users.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +62,7 @@ public class ChatHandler
         params.put("message", message.getMessage());
         params.put("timestamp", message.getTime());
         params.put("toId", message.getToId());
+        params.put("read", message.isRead() ? 1 : 0);
 
         AsyncHttpClient client = new AsyncHttpClient();
         chatMessageList.add(message);
@@ -73,7 +75,7 @@ public class ChatHandler
                 System.out.println("Status code: " + statusCode);
                 try
                 {
-                    long id = response.getLong("id");
+                    int id = response.getInt("id");
                     message.setId(id);
 
                     ChatHandler.addChatMessage(message);
@@ -115,14 +117,12 @@ public class ChatHandler
         });
     }
 
-    public static void addMessageToActivity(final int id, final String username, final String message, final String timestamp)
+    public static void addMessageToActivity(final ChatMessage cMessage)
     {
         chatActivity.runOnUiThread(new Runnable()
         {
             public void run()
             {
-                final ChatMessage cMessage;
-                cMessage = new ChatMessage(id, username, message, timestamp, currentlySpeakingTo_Id);
                 if (!cMessage.getUsername().equals(ChatHandler.myUsername))
                     chatActivity.messageAdapter.addMessage(cMessage);
 
@@ -165,5 +165,25 @@ public class ChatHandler
         selectedChatMessageList.clear();
         chatMode = ChatMode.NORMAL;
         toggleActionBar();
+    }
+
+    public static int getUnreadMessageCount(User user)
+    {
+        int counter = 0;
+        for(ChatMessage message: chatMessageDatabaseHandler.getAllChatMessagesFromUser(user))
+        {
+            if(!message.isRead() && !message.getUsername().equals(ChatHandler.myUsername))
+            {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public static void markMessageRead(int id)
+    {
+        ChatMessage message = chatMessageDatabaseHandler.getChatMessage(id);
+        message.setRead(true);
+        chatMessageDatabaseHandler.updateChatMessage(message);
     }
 }

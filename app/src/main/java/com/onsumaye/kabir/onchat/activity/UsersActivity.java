@@ -193,6 +193,7 @@ public class UsersActivity extends AppCompatActivity
     {
         super.onResume();
         StateHolder.appState = StateHolder.AppState.USERS;
+        userAdapter.notifyDataSetChanged();
         usersListView.setAdapter(userAdapter);
     }
 

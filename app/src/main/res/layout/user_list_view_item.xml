@@ -5,6 +5,7 @@
               android:layout_height="wrap_content">
 
 
+
     <ImageView
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -59,21 +60,13 @@
         android:layout_marginLeft="4dp"
         >
 
-        <ImageView
-            android:id="@+id/unreadMessagesBackground"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/unread_chat_background"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            />
-
         <TextView
             android:id="@+id/unreadMessagesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
             android:textColor="#FFFFFF"
+            android:background="@drawable/unread_chat_background"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:gravity="center"

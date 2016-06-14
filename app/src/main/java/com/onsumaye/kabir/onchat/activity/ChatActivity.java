@@ -26,6 +26,7 @@ import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.app.StateHolder;
 import com.onsumaye.kabir.onchat.dialogs.DeleteMessageConfirmationDialog;
+import com.onsumaye.kabir.onchat.helper.Common;
 import com.onsumaye.kabir.onchat.users.UserHandler;
 
 
@@ -110,8 +111,16 @@ public class ChatActivity extends AppCompatActivity
 
         toolbar_username.setText(nameCapitalized);
 
-
         ChatHandler.scrollChatToBottom();
+        String username = Common.capitalizeFirstLetter(ChatHandler.currentlySpeakingTo_username);
+
+        if(!ChatHandler.chatMessageDatabaseHandler.getAllReceivedChatMessagesByUsername(username).isEmpty())
+        {
+            for (ChatMessage message : ChatHandler.chatMessageDatabaseHandler.getAllReceivedChatMessagesByUsername(username))
+            {
+                ChatHandler.markMessageRead(message.getId());
+            }
+        }
     }
 
 

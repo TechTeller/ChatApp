@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <solid
-        android:color="?attr/colorControlActivated"/>
+        android:color="#009688"/>
 
     <size
-        android:width="30dp"
-        android:height="30dp"/>
+        android:width="40dp"
+        android:height="40dp"/>
 </shape>

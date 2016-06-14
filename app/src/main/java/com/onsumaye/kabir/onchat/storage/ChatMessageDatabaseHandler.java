@@ -30,6 +30,7 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_TIMESTAMP = "timestamp";
     public static final String KEY_TOID = "toId";
+    public static final String KEY_READ = "isread";
 
     public ChatMessageDatabaseHandler(Context context)
     {
@@ -45,7 +46,8 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
                 + KEY_USERNAME + " TEXT,"
                 + KEY_MESSAGE + " TEXT,"
                 + KEY_TIMESTAMP + " INT,"
-                + KEY_TOID + " INT"
+                + KEY_TOID + " INT,"
+                + KEY_READ + " INT"
                 + ")";
         db.execSQL(CREATE_MESSAGES_TABLE);
     }
@@ -59,7 +61,8 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
                 + KEY_USERNAME + " TEXT,"
                 + KEY_MESSAGE + " TEXT,"
                 + KEY_TIMESTAMP + " INT,"
-                + KEY_TOID + " INT"
+                + KEY_TOID + " INT,"
+                + KEY_READ + " INT"
                 + ")";
         try
         {
@@ -88,6 +91,7 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
         values.put(KEY_MESSAGE, cMessage.getMessage());
         values.put(KEY_TIMESTAMP, cMessage.getTime());
         values.put(KEY_TOID, cMessage.getToId());
+        values.put(KEY_READ, cMessage.isRead());
 
         db.insert(TABLE_MESSAGES, null, values);
         db.close();
@@ -97,7 +101,7 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
     {
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_MESSAGES, new String[] { KEY_ID, KEY_USERNAME, KEY_MESSAGE, KEY_TIMESTAMP, KEY_TOID },
+        Cursor cursor = db.query(TABLE_MESSAGES, new String[] { KEY_ID, KEY_USERNAME, KEY_MESSAGE, KEY_TIMESTAMP, KEY_TOID, KEY_READ },
                 KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if( cursor != null )
@@ -105,6 +109,10 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
 
         ChatMessage cMessage = new ChatMessage(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
                 cursor.getString(3), Integer.parseInt(cursor.getString(4)));
+        if(Integer.parseInt(cursor.getString(5)) == 0)
+            cMessage.setRead(false);
+        else
+            cMessage.setRead(true);
 
         return cMessage;
     }
@@ -119,10 +127,37 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
         return cursor.getCount();
     }
 
-    public List<ChatMessage> getAllChatMessagesFromUser(User user)
+    public List<ChatMessage> getAllReceivedChatMessagesByUsername(String username)
     {
         List<ChatMessage> chatMessageList = new ArrayList<ChatMessage>();
 
+        //Received messages
+        String selectQuery = "SELECT * FROM " + TABLE_MESSAGES + " WHERE username= \"" + username + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst())
+        {
+            do
+            {
+                ChatMessage cMessage = new ChatMessage(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), Integer.parseInt(cursor.getString(4)));
+                if(Integer.parseInt(cursor.getString(5)) == 0)
+                    cMessage.setRead(false);
+                else
+                    cMessage.setRead(true);
+                chatMessageList.add(cMessage);
+            }
+            while (cursor.moveToNext());
+        }
+
+        return chatMessageList;
+    }
+
+    public List<ChatMessage> getAllChatMessagesFromUser(User user)
+    {
+        List<ChatMessage> chatMessageList = new ArrayList<ChatMessage>();
 
         //Received messages
         String selectQuery = "SELECT * FROM " + TABLE_MESSAGES + " WHERE username= \"" + user.getUsername() + "\"";
@@ -136,6 +171,10 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
             {
                 ChatMessage cMessage = new ChatMessage(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), Integer.parseInt(cursor.getString(4)));
+                if(Integer.parseInt(cursor.getString(5)) == 0)
+                    cMessage.setRead(false);
+                else
+                    cMessage.setRead(true);
                 chatMessageList.add(cMessage);
             }
             while (cursor.moveToNext());
@@ -151,6 +190,11 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
             {
                 ChatMessage cMessage = new ChatMessage(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), Integer.parseInt(cursor.getString(4)));
+
+                if(Integer.parseInt(cursor.getString(5)) == 0)
+                    cMessage.setRead(false);
+                else
+                    cMessage.setRead(true);
                 chatMessageList.add(cMessage);
 
             }
@@ -189,6 +233,12 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
             do {
                 ChatMessage cMessage = new ChatMessage(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
                         cursor.getString(3), Integer.parseInt(cursor.getString(4)));
+
+                if(Integer.parseInt(cursor.getString(5)) == 0)
+                    cMessage.setRead(false);
+                else
+                    cMessage.setRead(true);
+
                 chatMessageList.add(cMessage);
             }
             while (cursor.moveToNext());
@@ -208,6 +258,8 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
         values.put(KEY_MESSAGE, cMessage.getMessage());
         values.put(KEY_TIMESTAMP, cMessage.getTime());
         values.put(KEY_TOID, cMessage.getToId());
+        values.put(KEY_READ, cMessage.isRead());
+        System.out.println("Message read status: " + cMessage.isRead());
 
         return db.update(TABLE_MESSAGES, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(cMessage.getId()) });
@@ -219,4 +271,4 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
         db.delete(TABLE_MESSAGES, KEY_ID + "= ?", new String[] { String.valueOf(cMessage.getId() )});
         db.close();
     }
-    }
+}

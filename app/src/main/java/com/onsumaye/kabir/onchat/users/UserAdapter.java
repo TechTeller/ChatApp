@@ -4,6 +4,7 @@ package com.onsumaye.kabir.onchat.users;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,18 @@ public class UserAdapter extends BaseAdapter
         holder.usernameTextView = (TextView) convertView.findViewById(R.id.usernameTextView);
         holder.lastMessageReceived = (TextView) convertView.findViewById(R.id.lastMessage);
 
-        holder.unreadMessageCounter.setText(String.valueOf(UserHandler.usersList.get(position).getUnreadMessages()));
+        if(ChatHandler.getUnreadMessageCount(user) == 0)
+        {
+            //There are no unread messages
+            holder.unreadMessageCounter.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            //There are a few unread messages
+            holder.unreadMessageCounter.setVisibility(View.VISIBLE);
+        }
+
+        holder.unreadMessageCounter.setText(String.valueOf(ChatHandler.getUnreadMessageCount(user)));
         holder.usernameTextView.setText(UserHandler.usersList.get(position).getUsername());
         if(!ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).isEmpty())
         {

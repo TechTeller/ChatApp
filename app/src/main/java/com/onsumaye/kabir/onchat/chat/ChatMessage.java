@@ -2,13 +2,14 @@ package com.onsumaye.kabir.onchat.chat;
 
 public class ChatMessage
 {
-    private long id;
+    private int id;
     private String username;
     private String message;
     private long time;
     private boolean sent;
     private int toId;
     private boolean isSelected;
+    private boolean read;
 
     public ChatMessage(int id, String username, String message, String time, int toId)
     {
@@ -17,7 +18,19 @@ public class ChatMessage
         this.message = message;
         this.time = Long.parseLong(time);
         this.toId = toId;
+        this.read = false;
         isSelected = false;
+    }
+
+    public ChatMessage(int id, String username, String message, String time, int toId, boolean read)
+    {
+        this.id = id;
+        this.username = username;
+        this.message = message;
+        this.time = Long.parseLong(time);
+        this.toId = toId;
+        isSelected = false;
+        this.read = read;
     }
 
     public ChatMessage(String username, String message, String time, int toId)
@@ -27,14 +40,15 @@ public class ChatMessage
         this.time = Long.parseLong(time);
         this.toId = toId;
         isSelected = false;
+        this.read = false;
     }
 
-    public long getId()
+    public int getId()
     {
         return id;
     }
 
-    public void setId(long id)
+    public void setId(int id)
     {
         this.id = id;
     }
@@ -92,5 +106,15 @@ public class ChatMessage
     public void setSelected(boolean selected)
     {
         isSelected = selected;
+    }
+
+    public boolean isRead()
+    {
+        return read;
+    }
+
+    public void setRead(boolean read)
+    {
+        this.read = read;
     }
 }
