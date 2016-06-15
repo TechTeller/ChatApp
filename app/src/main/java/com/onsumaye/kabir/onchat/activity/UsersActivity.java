@@ -85,8 +85,14 @@ public class UsersActivity extends AppCompatActivity
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                String s = intent.getStringExtra("refreshAdapter");
-                refreshAdapter();
+                if(intent.getAction().equals("refreshAdapterIntent"))
+                    refreshAdapter();
+                else if(intent.getAction().equals("addUser"))
+                {
+                    String username = intent.getStringExtra("username");
+                    System.out.println(username);
+                    addUser(username);
+                }
             }
         };
     }
@@ -97,6 +103,9 @@ public class UsersActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
                 new IntentFilter("refreshAdapterIntent")
         );
+
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
+                new IntentFilter("addUser"));
     }
 
     @Override
