@@ -135,20 +135,6 @@ public class ChatActivity extends AppCompatActivity
         chatBox.setText("");
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.logOutButton:
-                finish();
-                setResult(1);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     protected void onResume() {
         super.onResume();
         StateHolder.appState = StateHolder.AppState.CHAT;

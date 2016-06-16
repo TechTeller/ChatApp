@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.onsumaye.kabir.onchat.chat.ChatHandler;
 import com.onsumaye.kabir.onchat.chat.ChatMessage;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
+import com.onsumaye.kabir.onchat.helper.Common;
 
 public class UserAdapter extends BaseAdapter
 {
@@ -48,7 +50,8 @@ public class UserAdapter extends BaseAdapter
 
     private class Holder
     {
-        TextView usernameTextView, unreadMessageCounter, lastMessageReceived;
+        TextView usernameTextView, unreadMessageCounter, lastMessageReceived, lastMessageTime;
+        LinearLayout userBackground;
     }
 
     @Override
@@ -59,9 +62,12 @@ public class UserAdapter extends BaseAdapter
 
         convertView = inflater.inflate(R.layout.user_list_view_item, null);
 
+
         holder.unreadMessageCounter = (TextView) convertView.findViewById(R.id.unreadMessagesTextView);
         holder.usernameTextView = (TextView) convertView.findViewById(R.id.usernameTextView);
         holder.lastMessageReceived = (TextView) convertView.findViewById(R.id.lastMessage);
+        holder.lastMessageTime = (TextView) convertView.findViewById(R.id.lastMessageTime);
+        holder.userBackground = (LinearLayout) convertView.findViewById(R.id.userBackground);
 
         if(ChatHandler.getUnreadMessageCount(user) == 0)
         {
@@ -81,6 +87,7 @@ public class UserAdapter extends BaseAdapter
             int lastMessageIndex = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).size() - 1;
             ChatMessage lastMessage = ChatHandler.chatMessageDatabaseHandler.getAllChatMessagesFromUser(user).get(lastMessageIndex);
             holder.lastMessageReceived.setText(lastMessage.getMessage());
+            holder.lastMessageTime.setText(ChatHandler.getTimeStamp(lastMessage.getTime()));
         }
         else
         {
@@ -92,24 +99,53 @@ public class UserAdapter extends BaseAdapter
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ChatHandler.currentlySpeakingTo_Id = user.getId();
-                ChatHandler.currentlySpeakingTo_username = user.getUsername().toLowerCase();
-                context.startActivity(intent);
+                if(UserHandler.userMode == UserHandler.UserMode.NORMAL)
+                {
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    ChatHandler.currentlySpeakingTo_Id = user.getId();
+                    ChatHandler.currentlySpeakingTo_username = user.getUsername().toLowerCase();
+                    context.startActivity(intent);
+                }
+                else
+                {
+                    if(!user.isSelected())
+                    {
+                        user.setSelected(true);
+                        v.setBackgroundColor(Common.chat_selectedColor);
+                        UserHandler.selectedUsersList.add(user);
+                    }
+                    else
+                    {
+                        user.setSelected(false);
+                        v.setBackgroundColor(Common.chat_originalColor);
+                        UserHandler.selectedUsersList.remove(user);
+
+                        if(UserHandler.selectedUsersList.isEmpty())
+                        {
+                            UserHandler.userMode = UserHandler.UserMode.NORMAL;
+                            UserHandler.toggleActionBar();
+                        }
+                    }
+                }
             }
         });
 
-        return convertView;
-    }
-
-    public void addUser(User user)
-    {
-        if(!UserHandler.doesUserExist(user.getId()))
+        holder.userBackground.setOnLongClickListener(new View.OnLongClickListener()
         {
-            UserHandler.usersList.add(user);
-        }
-        else Toast.makeText(context, "User already exists in the list.", Toast.LENGTH_SHORT).show();
-        notifyDataSetChanged();
+            @Override
+            public boolean onLongClick(View v)
+            {
+                v.setBackgroundColor(Common.chat_selectedColor);
+                user.setSelected(true);
+                UserHandler.userMode = UserHandler.UserMode.SELECTION;
+                UserHandler.selectedUsersList.add(user);
+                UserHandler.toggleActionBar();
+                return true;
+            }
+        });
+
+
+        return convertView;
     }
 }

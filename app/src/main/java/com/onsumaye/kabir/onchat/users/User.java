@@ -7,11 +7,14 @@ public class User
     private String username;
     private String gcmId;
     private int unreadMessages;
+    private boolean selected;
+
     public User(int id, String username, String gcmId)
     {
         this.id = id;
         this.username = username;
         this.gcmId = gcmId;
+        selected = false;
         unreadMessages = 0;
     }
 
@@ -21,6 +24,7 @@ public class User
         this.username = username;
         this.gcmId = gcmId;
         this.unreadMessages = unreadMessages;
+        selected = false;
     }
 
     public void setUnreadMessages(int unreadMessages)
@@ -61,6 +65,16 @@ public class User
     public void setGcmId(String gcmId)
     {
         this.gcmId = gcmId;
+    }
+
+    public boolean isSelected()
+    {
+        return selected;
+    }
+
+    public void setSelected (boolean selected)
+    {
+        this.selected = selected;
     }
 
 }

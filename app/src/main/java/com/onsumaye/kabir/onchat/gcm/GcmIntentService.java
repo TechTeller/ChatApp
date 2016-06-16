@@ -105,6 +105,7 @@ public class GcmIntentService extends IntentService
                 try
                 {
                     String gcmId = response.getString("gcmId");
+                    ChatHandler.myUserId = response.getInt("userId") + 1;
                     System.out.println(gcmId);
                 }
                 catch (JSONException e)

@@ -11,6 +11,8 @@ import com.onsumaye.kabir.onchat.chat.ChatMessage;
 import com.onsumaye.kabir.onchat.activity.ChatActivity;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.app.StateHolder;
+import com.onsumaye.kabir.onchat.users.User;
+import com.onsumaye.kabir.onchat.users.UserHandler;
 
 public class GcmPushReceiver extends GcmListenerService {
 
@@ -33,8 +35,23 @@ public class GcmPushReceiver extends GcmListenerService {
             if(StateHolder.appState == StateHolder.AppState.CHAT)
             {
                 ChatMessage chatMessage = new ChatMessage(id, username, message, timestamp, ChatHandler.currentlySpeakingTo_Id, true);
-                ChatHandler.addMessageToActivity(chatMessage);
+                if(chatMessage.getToId() == ChatHandler.myUserId)
+                    ChatHandler.addMessageToActivity(chatMessage);
             }
+
+            User user = UserHandler.getUserByUsername(username);
+            if(user == null)
+            {
+                //Add the user to the list
+                Intent intent = new Intent("addUser");
+                intent.putExtra("username", username);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            }
+            else UserHandler.moveUserToTop(user);
+
+            System.out.println(UserHandler.usersList.toString());
+
+
 
             //Save in chat messages database
             ChatMessage cMessage;

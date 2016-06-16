@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,6 +23,7 @@ import com.onsumaye.kabir.onchat.chat.ChatHandler;
 import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.app.StateHolder;
+import com.onsumaye.kabir.onchat.dialogs.DeleteUserConfirmationDialog;
 import com.onsumaye.kabir.onchat.storage.UserDatabaseHandler;
 import com.onsumaye.kabir.onchat.users.User;
 import com.onsumaye.kabir.onchat.users.UserAdapter;
@@ -37,6 +40,8 @@ public class UsersActivity extends AppCompatActivity
     FloatingActionButton fab;
     UserAdapter userAdapter;
     EditText addUserEditText;
+    public TextView loggedInAs;
+    public ImageButton toolbar_deleteButton;
 
     BroadcastReceiver receiver;
 
@@ -56,15 +61,18 @@ public class UsersActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Users");
+        setTitle("");
         setTitleColor(R.color.common_plus_signin_btn_text_light);
         userAdapter = new UserAdapter(getApplicationContext());
 
         usersListView = (ListView) findViewById(R.id.userListView);
+        loggedInAs = (TextView) findViewById(R.id.loggedInAs);
+        toolbar_deleteButton = (ImageButton) findViewById(R.id.deleteUserButton);
         usersListView.setAdapter(userAdapter);
 
         fab = (FloatingActionButton) findViewById(R.id.addUserButton);
         addUserEditText = (EditText) findViewById(R.id.addUserEditText);
+        loggedInAs.setText("You are logged in as " + ChatHandler.myUsername);
 
         fab.setOnClickListener(new View.OnClickListener()
         {
@@ -95,6 +103,16 @@ public class UsersActivity extends AppCompatActivity
                 }
             }
         };
+
+        toolbar_deleteButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DeleteUserConfirmationDialog dialog = new DeleteUserConfirmationDialog();
+                dialog.show(getFragmentManager(), "OnChat");
+            }
+        });
     }
 
     @Override
@@ -173,7 +191,12 @@ public class UsersActivity extends AppCompatActivity
                         String gcmId = response.getString("gcmId");
 
                         User user = new User(id, username, gcmId, 0);
-                        userAdapter.addUser(user);
+                        if(!UserHandler.doesUserExist(user.getId()))
+                        {
+                            UserHandler.usersList.add(0, user);
+                        }
+                        else Toast.makeText(getApplicationContext(), "User already exists in the list.", Toast.LENGTH_SHORT).show();
+                        userAdapter.notifyDataSetChanged();
 
                         //Save it to the database
                         userDbHandler.addUser(user);

@@ -8,19 +8,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.onsumaye.kabir.onchat.chat.ChatHandler;
+import com.onsumaye.kabir.onchat.users.UserHandler;
 
-public class DeleteMessageConfirmationDialog extends DialogFragment
+public class DeleteUserConfirmationDialog extends DialogFragment
 {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Are you sure you want to delete messages?")
+        builder.setMessage("Are you sure you want to delete the selected users?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        ChatHandler.deleteMessage();
+                        UserHandler.deleteUser();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -33,4 +34,5 @@ public class DeleteMessageConfirmationDialog extends DialogFragment
 
         return builder.create();
     }
+
 }

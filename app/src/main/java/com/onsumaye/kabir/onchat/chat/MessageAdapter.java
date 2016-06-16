@@ -171,8 +171,4 @@ public class MessageAdapter extends BaseAdapter
             
         }
     }
-
-
-
-
 }
