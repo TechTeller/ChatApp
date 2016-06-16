@@ -2,13 +2,16 @@ package com.onsumaye.kabir.onchat.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -72,7 +75,7 @@ public class UsersActivity extends AppCompatActivity
 
         fab = (FloatingActionButton) findViewById(R.id.addUserButton);
         addUserEditText = (EditText) findViewById(R.id.addUserEditText);
-        loggedInAs.setText("You are logged in as " + ChatHandler.myUsername);
+        loggedInAs.setText(Html.fromHtml("You are logged in as <b>" + ChatHandler.myUsername + "</b>"));
 
         fab.setOnClickListener(new View.OnClickListener()
         {
@@ -243,8 +246,25 @@ public class UsersActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
         //Logging out
         UserHandler.usersList.clear();
+
+        new android.app.AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        //Do nothing
+                    }
+                })
+                .show();
     }
 }

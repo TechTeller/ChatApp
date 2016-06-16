@@ -4,14 +4,12 @@ package com.onsumaye.kabir.onchat.users;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.onsumaye.kabir.onchat.chat.ChatHandler;
 import com.onsumaye.kabir.onchat.chat.ChatMessage;
@@ -139,12 +137,12 @@ public class UserAdapter extends BaseAdapter
                 v.setBackgroundColor(Common.chat_selectedColor);
                 user.setSelected(true);
                 UserHandler.userMode = UserHandler.UserMode.SELECTION;
-                UserHandler.selectedUsersList.add(user);
+                if(!UserHandler.selectedUsersList.contains(user))
+                    UserHandler.selectedUsersList.add(user);
                 UserHandler.toggleActionBar();
                 return true;
             }
         });
-
 
         return convertView;
     }

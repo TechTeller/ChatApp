@@ -99,7 +99,7 @@ public class ChatHandler
     public static String getTimeStamp(long time)
     {
         String timeStamp;
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm", Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
         timeStamp = formatter.format(time);
         return timeStamp;
     }

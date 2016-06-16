@@ -105,14 +105,17 @@ public class UserHandler
     {
         if(userMode == UserMode.SELECTION)
         {
+            userActivity.loggedInAs.animate().alpha(0);
             userActivity.loggedInAs.setVisibility(View.INVISIBLE);
+            userActivity.toolbar_deleteButton.animate().alpha(1);
             userActivity.toolbar_deleteButton.setVisibility(View.VISIBLE);
         }
         else
         {
+            userActivity.loggedInAs.animate().alpha(1);
             userActivity.loggedInAs.setVisibility(View.VISIBLE);
+            userActivity.toolbar_deleteButton.animate().alpha(1);
             userActivity.toolbar_deleteButton.setVisibility(View.INVISIBLE);
         }
     }
-
 }

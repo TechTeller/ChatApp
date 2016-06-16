@@ -37,11 +37,11 @@
 
         <TextView
             android:id="@+id/lastMessage"
-            android:layout_width="160dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="Hello"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginRight="8dp"
@@ -49,6 +49,7 @@
             android:textSize="13sp"
             android:textColor="#7e7e7e"
             android:layout_below="@id/usernameTextView"
+            android:layout_alignLeft="@+id/lastMessageTime"
             android:singleLine="true"
             />
 
@@ -56,12 +57,17 @@
             android:id="@+id/lastMessageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/lastMessage"
-            android:layout_toRightOf="@+id/lastMessage"
-            android:layout_toEndOf="@+id/lastMessage"
             android:singleLine="true"
             android:textColor="#7e7e7e"
-            android:textSize="13sp"
+            android:textSize="8sp"
+            android:text="00:12"
+            android:layout_below="@id/usernameTextView"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             />
 
     </RelativeLayout>
@@ -86,8 +92,6 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             />
-
-
 
     </RelativeLayout>
 
