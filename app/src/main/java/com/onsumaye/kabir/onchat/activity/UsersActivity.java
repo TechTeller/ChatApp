@@ -27,6 +27,7 @@ import com.onsumaye.kabir.onchat.R;
 import com.onsumaye.kabir.onchat.app.Config;
 import com.onsumaye.kabir.onchat.app.StateHolder;
 import com.onsumaye.kabir.onchat.dialogs.DeleteUserConfirmationDialog;
+import com.onsumaye.kabir.onchat.helper.Common;
 import com.onsumaye.kabir.onchat.storage.UserDatabaseHandler;
 import com.onsumaye.kabir.onchat.users.User;
 import com.onsumaye.kabir.onchat.users.UserAdapter;
@@ -161,7 +162,9 @@ public class UsersActivity extends AppCompatActivity
             {
                 //Send request to the server which will search the database for user existing
                 String userToAdd = addUserEditText.getText().toString();
-                if(!userToAdd.equals(ChatHandler.myUsername))
+                userToAdd = userToAdd.toLowerCase();
+                userToAdd = Common.capitalizeFirstLetter(userToAdd);
+                if(!userToAdd.equalsIgnoreCase(ChatHandler.myUsername))
                 {
                     addUser(userToAdd);
                 }

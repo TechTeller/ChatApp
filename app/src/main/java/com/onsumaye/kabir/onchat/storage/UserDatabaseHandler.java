@@ -29,7 +29,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper
     public UserDatabaseHandler(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        TABLE_USERS = "users_" + ChatHandler.myUsername;
+        TABLE_USERS = "users_" + ChatHandler.myUsername.toLowerCase();
     }
 
     @Override

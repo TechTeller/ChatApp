@@ -59,16 +59,20 @@ public class LoginActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE))
+                {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
                     String token = intent.getStringExtra("token");
 
-                } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
+                }
+                else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER))
+                {
                     // gcm registration id is stored in our server's MySQL
 
-
-                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }
+                else if (intent.getAction().equals(Config.PUSH_NOTIFICATION))
+                {
                     // new push notification is received
                 }
             }

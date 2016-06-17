@@ -3,7 +3,9 @@ package com.onsumaye.kabir.onchat.gcm;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Html;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.onsumaye.kabir.onchat.chat.ChatHandler;
@@ -28,15 +30,19 @@ public class GcmPushReceiver extends GcmListenerService {
         final String message = bundle.getString("message");
         final String timestamp = bundle.getString("timestamp");
         final int toId = Integer.parseInt(bundle.getString("toId"));
+        System.out.println("Message received!");
 
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
         {
+            ChatMessage chatMessage = new ChatMessage(id, username, message, timestamp, ChatHandler.currentlySpeakingTo_Id);
             //Add to chat activity if activity is open otherwise only add to database
             if(StateHolder.appState == StateHolder.AppState.CHAT)
             {
-                ChatMessage chatMessage = new ChatMessage(id, username, message, timestamp, ChatHandler.currentlySpeakingTo_Id, true);
-                if(chatMessage.getToId() == ChatHandler.myUserId)
+                if(chatMessage.getUsername().equalsIgnoreCase(ChatHandler.currentlySpeakingTo_username))
+                {
+                    chatMessage.setRead(true);
                     ChatHandler.addMessageToActivity(chatMessage);
+                }
             }
 
             User user = UserHandler.getUserByUsername(username);
@@ -51,16 +57,11 @@ public class GcmPushReceiver extends GcmListenerService {
 
             System.out.println(UserHandler.usersList.toString());
 
-
-
             //Save in chat messages database
-            ChatMessage cMessage;
-            cMessage = new ChatMessage(id, username, message, timestamp, toId);
-
-            ChatHandler.chatMessageDatabaseHandler.addChatMessage(cMessage);
+            ChatHandler.chatMessageDatabaseHandler.addChatMessage(chatMessage);
 
             //Update the adapter view
-            refreshUserAdapter();
+            refreshUserAdapter(this);
 
             // app is in background, broadcast the push message
             Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
@@ -69,8 +70,17 @@ public class GcmPushReceiver extends GcmListenerService {
         }
         else
         {
+            //App is not in focus
             Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
             resultIntent.putExtra("message", message);
+
+            //Add message to database
+            ChatMessage chatMessage = new ChatMessage(id, username, message, timestamp, ChatHandler.currentlySpeakingTo_Id, false);
+            ChatHandler.chatMessageDatabaseHandler.addChatMessage(chatMessage);
+
+            //Vibrate
+            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(500);
 
             showNotificationMessage(getApplicationContext(), username, message, String.valueOf(timestamp) , resultIntent);
         }
@@ -85,11 +95,11 @@ public class GcmPushReceiver extends GcmListenerService {
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
     }
 
-    private void refreshUserAdapter()
+    private void refreshUserAdapter(Context context)
     {
         Intent intent = new Intent("refreshAdapterIntent");
         intent.putExtra("Message", "refreshAdapter");
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
     }
 }

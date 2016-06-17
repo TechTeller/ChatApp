@@ -122,8 +122,6 @@ public class ChatActivity extends AppCompatActivity
             }
         }
     }
-
-
     public void onSendClicked(View view)
     {
         if(chatBox.getText().toString().equals(""))

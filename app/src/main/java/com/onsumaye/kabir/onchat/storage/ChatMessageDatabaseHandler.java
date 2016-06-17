@@ -259,7 +259,6 @@ public class ChatMessageDatabaseHandler extends SQLiteOpenHelper
         values.put(KEY_TIMESTAMP, cMessage.getTime());
         values.put(KEY_TOID, cMessage.getToId());
         values.put(KEY_READ, cMessage.isRead());
-        System.out.println("Message read status: " + cMessage.isRead());
 
         return db.update(TABLE_MESSAGES, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(cMessage.getId()) });

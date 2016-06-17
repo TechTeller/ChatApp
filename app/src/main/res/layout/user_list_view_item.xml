@@ -60,7 +60,6 @@
             android:singleLine="true"
             android:textColor="#7e7e7e"
             android:textSize="8sp"
-            android:text="00:12"
             android:layout_below="@id/usernameTextView"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
